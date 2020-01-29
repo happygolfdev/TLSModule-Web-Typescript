@@ -9,6 +9,8 @@ class ExampleRequest implements BaseRequest {
     switch (type) {
       case RequestType.signIn:
         this.config = new RequestConfig("auth/", Method.post);
+      case RequestType.signOut:
+        this.config = new RequestConfig("auth/", Method.put);
     }
   }
 
@@ -22,7 +24,8 @@ class ExampleRequest implements BaseRequest {
 }
 
 enum RequestType {
-  signIn
+  signIn,
+  signOut
 }
 
 export { ExampleRequest, RequestType };

@@ -22,10 +22,12 @@ class UserManager {
    * @summary 사용자 데이터를 로컬스토리지에 저장한다.
    * @param user 사용자 데이터의 Object
    */
-  public setUser(user: any) {
+  public setUser(user: User) {
     const userString = JSON.stringify(user);
     window.localStorage.setItem("tls_client", userString);
   }
+
+  public resetToken(newToken: String) {}
 }
 
 export { UserManager };
