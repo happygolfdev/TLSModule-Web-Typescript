@@ -3,11 +3,21 @@
  * @const id 아이디
  * @const clientSecret 시크릿
  */
-interface User {
+class User extends Object {
   id: Number;
-  clientSecret: String;
-  token: String;
-  data: any;
+  clientSecretKey: String;
+  accessToken: String;
+
+  constructor(id: Number, clientSecretKey: String, accessToken: String) {
+    super();
+    this.id = id;
+    this.clientSecretKey = clientSecretKey;
+    this.accessToken = accessToken;
+  }
+
+  static create(obj: any): User {
+    return new User(Number(obj.id), obj.clientSecret, obj.token);
+  }
 }
 
 export { User };

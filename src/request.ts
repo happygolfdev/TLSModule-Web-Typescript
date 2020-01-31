@@ -16,7 +16,7 @@ class RequestManager {
   async request(baseRequest: BaseRequest, user?: User) {
     try {
       const headers = {
-        Authorization: `bearer ${user?.token}`
+        Authorization: `bearer ${user?.accessToken}`
       };
 
       const response = await axios({
@@ -44,7 +44,7 @@ class RequestManager {
             return;
           }
           var newToken = await this.renewAccessToken(baseRequest, user!);
-          user.token = newToken;
+          user.accessToken = newToken;
           await this.request(baseRequest, user);
         default:
           const result = new RequestResult(
@@ -69,7 +69,7 @@ class RequestManager {
         url: `${baseRequest.tokeRenewalURL}`,
         data: {
           Data: {
-            clientSecretKey: user.clientSecret
+            clientSecretKey: user.clientSecretKey
           }
         }
       });

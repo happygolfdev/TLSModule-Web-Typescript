@@ -1,7 +1,7 @@
 {
-  "name": "TLSModules",
-  "version": "1.0.0",
-  "description": "",
+  "name": "tlsmodules",
+  "version": "1.0.1",
+  "description": "Moduels for TLS",
   "main": "app.js",
   "scripts": {
     "start": "node dist/app.js",
@@ -9,13 +9,25 @@
     "build": "tsc -p ."
   },
   "keywords": [],
-  "author": "",
+  "author": "Justin Ji, Jin Jeong",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^13.1.7",
     "axios": "^0.19.1",
+    "fcm-notification": "^2.0.0",
     "nodemon": "^2.0.2",
     "ts-node": "^8.6.2",
     "typescript": "^3.7.4"
-  }
+  },
+  "dependencies": {
+    "tls_fcm": "^1.1.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/happygolfdev/TLSModule-Web-Typescript.git"
+  },
+  "bugs": {
+    "url": "https://github.com/happygolfdev/TLSModule-Web-Typescript/issues"
+  },
+  "homepage": "https://github.com/happygolfdev/TLSModule-Web-Typescript#readme"
 }

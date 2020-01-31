@@ -1,8 +1,15 @@
 import { Logger } from "./logger";
 
-async function asyncForEach(array: any[], callback: (value: any) => void) {
+/**
+ * @param array 반복을 돌리고 싶은 배열
+ * @param callback 각 반복하는 값과 index값을 리턴하는 함수
+ */
+async function repeat(
+  array: any[],
+  callback: (value: any, idx: Number) => void
+) {
   for (let index = 0; index < array.length; index++) {
-    await callback(array[index]);
+    await callback(array[index], index);
   }
 }
 
@@ -47,4 +54,4 @@ async function response(
   }
 }
 
-export { asyncForEach, response };
+export { repeat, response };
