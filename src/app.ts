@@ -5,35 +5,6 @@ import { repeat } from "./universal/universal";
 import { Logger } from "./universal/logger";
 import { ExmapleUserManager } from "./examples/exampleUserManager";
 import { MembershipManager } from "../src/membership/membership";
-import { access } from "fs";
-async function doExampleRequest() {
-  const requestManager = new RequestManager();
-  const request = new ExampleRequest(RequestType.signIn);
-  const body = {
-    email: "jjeui0308@gmail.com",
-    loginType: 3,
-    fcmToken: "adsf",
-    provider_token: "null",
-    password: "aaaa1111",
-    sysLang: 0
-  };
-
-  request.addBody(body);
-  console.log(
-    "================================================================================"
-  );
-  const result = await requestManager.request(request);
-  console.log(result);
-  console.log(
-    "================================================================================"
-  );
-  return result;
-}
-
-doExampleRequest();
-// repeat([1, 2, 3], async (value, idx) => {
-//   Logger.showMessage(`${idx}번째 값: ${value}`);
-// });
 
 var accessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTc5MDA4MzgwLCJleHAiOjE1ODI2MDgzODAsImlzcyI6IkFydGlsZWFybiJ9.kkYmp6yN8HiveOjBA5ZbPst0z7Bu-KX-X-q8t1govwM";
