@@ -1,5 +1,5 @@
 interface UserManager<T> {
-  key: String;
+  KEY: String;
   getUser(): T | null;
   setUser(user: T): void;
   resetToken(newToken: String): void;

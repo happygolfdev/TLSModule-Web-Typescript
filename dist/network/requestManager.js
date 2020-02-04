@@ -40,9 +40,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
-var logger_1 = require("./logger");
+var logger_1 = require("../logger");
+var requestResult_1 = require("./requestResult");
+var requestResultType_1 = require("./requestResultType");
 /**
- * @class HTTP 서버통신의 요청작업을 수행하는 클래스
+ * HTTP 서버통신의 요청작업을 수행하는 클래스
  */
 var RequestManager = /** @class */ (function () {
     function RequestManager() {
@@ -55,11 +57,11 @@ var RequestManager = /** @class */ (function () {
     RequestManager.prototype.request = function (baseRequest, user) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var headers, response, data, result, error_1, status_1, _b, newToken, result_1;
+            var headers, response, data, result, error_1, status_1, _b, newToken, result_1, result_2;
             return __generator(this, function (_c) {
                 switch (_c.label) {
                     case 0:
-                        _c.trys.push([0, 2, , 8]);
+                        _c.trys.push([0, 2, , 9]);
                         headers = {
                             Authorization: "bearer " + ((_a = user) === null || _a === void 0 ? void 0 : _a.accessToken)
                         };
@@ -74,8 +76,9 @@ var RequestManager = /** @class */ (function () {
                     case 1:
                         response = _c.sent();
                         data = response.data.Data;
-                        result = new RequestResult(RequestResultType.pSuccess, response.status, response.data.message);
+                        result = new requestResult_1.RequestResult(requestResultType_1.RequestResultType.pSuccess, response.status, response.data.message);
                         result.data = data;
+                        logger_1.Logger.showError("aa");
                         return [2 /*return*/, result];
                     case 2:
                         error_1 = _c.sent();
@@ -84,25 +87,36 @@ var RequestManager = /** @class */ (function () {
                         _b = status_1;
                         switch (_b) {
                             case 419: return [3 /*break*/, 3];
+                            case 500: return [3 /*break*/, 6];
                         }
-                        return [3 /*break*/, 6];
+                        return [3 /*break*/, 7];
                     case 3:
                         if (user == null) {
                             return [2 /*return*/];
                         }
                         return [4 /*yield*/, this.renewAccessToken(baseRequest, user)];
                     case 4:
-                        newToken = _c.sent();
+                        newToken = (_c.sent()).newToken;
                         user.accessToken = newToken;
                         return [4 /*yield*/, this.request(baseRequest, user)];
                     case 5:
                         _c.sent();
                         _c.label = 6;
                     case 6:
-                        result_1 = new RequestResult(RequestResultType.nSuccess, status_1, error_1.response.data.message);
-                        return [2 /*return*/, result_1];
-                    case 7: return [3 /*break*/, 8];
-                    case 8: return [2 /*return*/];
+                        {
+                            result_1 = new requestResult_1.RequestResult(requestResultType_1.RequestResultType.failure, status_1, error_1.response.data.message);
+                            return [2 /*return*/, result_1];
+                        }
+                        _c.label = 7;
+                    case 7:
+                        {
+                            console.log("%");
+                            result_2 = new requestResult_1.RequestResult(requestResultType_1.RequestResultType.nSuccess, status_1, error_1.response.data.message);
+                            return [2 /*return*/, result_2];
+                        }
+                        _c.label = 8;
+                    case 8: return [3 /*break*/, 9];
+                    case 9: return [2 /*return*/];
                 }
             });
         });
@@ -131,11 +145,15 @@ var RequestManager = /** @class */ (function () {
                     case 1:
                         response = _a.sent();
                         newAccessToken = response.data.Data.token;
-                        return [2 /*return*/, newAccessToken];
+                        return [2 /*return*/, {
+                                newToken: newAccessToken
+                            }];
                     case 2:
                         error_2 = _a.sent();
                         logger_1.Logger.showError(error_2);
-                        return [2 /*return*/, null];
+                        return [2 /*return*/, {
+                                newToken: null
+                            }];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -144,53 +162,3 @@ var RequestManager = /** @class */ (function () {
     return RequestManager;
 }());
 exports.RequestManager = RequestManager;
-/**
- * @summary HTTP 서버통신의 요청 결과 데이터 모델 class
- * @name type 요청결과 타입
- * @name status 요청결과 status 값
- * @name message 요청결과 메세지
- * @name data 응답의 바디 데이터(JSON)
- * @name errorCode 서버에서 넘겨주는 에러코드 값
- */
-var RequestResult = /** @class */ (function () {
-    function RequestResult(type, status, message) {
-        this.type = type;
-        this.status = status;
-        this.message = message;
-    }
-    return RequestResult;
-}());
-/**
- * @summary HTTP 서버통신의 결과 타입
- * @member pSuccess Postive Success의 약자: 200번 영역의 status 값
- * @member nSuccess Negative Success의 약자: 400번 영역의 status 값
- * @member failure 서버통신 실패시
- */
-var RequestResultType;
-(function (RequestResultType) {
-    RequestResultType[RequestResultType["pSuccess"] = 0] = "pSuccess";
-    RequestResultType[RequestResultType["nSuccess"] = 1] = "nSuccess";
-    RequestResultType[RequestResultType["failure"] = 2] = "failure";
-})(RequestResultType || (RequestResultType = {}));
-/**
- * @summary HTTP통신 요청을 위한 주변 환경값들을 저장하는 클래스
- */
-var RequestConfig = /** @class */ (function () {
-    function RequestConfig(endpoint, method) {
-        this.endpoint = endpoint;
-        this.method = method;
-    }
-    return RequestConfig;
-}());
-exports.RequestConfig = RequestConfig;
-/**
- * @summary HTTP통신의 METHOD
- */
-var Method;
-(function (Method) {
-    Method["get"] = "get";
-    Method["post"] = "post";
-    Method["put"] = "put";
-    Method["delete"] = "delete";
-})(Method || (Method = {}));
-exports.Method = Method;

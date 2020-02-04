@@ -1,12 +1,12 @@
-import { UserManager } from "./userManager";
+import { UserManager } from "../userManager";
 import { ExampleUser } from "./exampleUser";
-import { Logger } from "./logger";
+import { Logger } from "../logger";
 
 class ExmapleUserManager implements UserManager<ExampleUser> {
-  key: String = "tls_exmaple_user_Key";
+  KEY: String = "tls_exmaple_user_Key";
 
   getUser(): ExampleUser | null {
-    const dataString = window.localStorage.getItem(String(this.key));
+    const dataString = window.localStorage.getItem(String(this.KEY));
     if (dataString == null) {
       Logger.showError("no data String for User saved in the local storage");
       return null;

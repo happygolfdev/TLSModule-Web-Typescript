@@ -1,13 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var exampleUser_1 = require("./exampleUser");
-var logger_1 = require("./logger");
+var logger_1 = require("../logger");
 var ExmapleUserManager = /** @class */ (function () {
     function ExmapleUserManager() {
-        this.key = "tls_exmaple_user_Key";
+        this.KEY = "tls_exmaple_user_Key";
     }
     ExmapleUserManager.prototype.getUser = function () {
-        var dataString = window.localStorage.getItem(String(this.key));
+        var dataString = window.localStorage.getItem(String(this.KEY));
         if (dataString == null) {
             logger_1.Logger.showError("no data String for User saved in the local storage");
             return null;

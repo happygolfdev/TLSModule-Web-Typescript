@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { User } from "../userManagement/user";
 
 class ExampleUser implements User {
   id: Number;

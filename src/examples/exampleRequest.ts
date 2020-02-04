@@ -1,4 +1,5 @@
-import { BaseRequest, RequestConfig, Method } from "./request";
+import { BaseRequest } from "../network/baseRequest";
+import { RequestConfig, Method } from "../network/requestConfig";
 
 class ExampleRequest implements BaseRequest {
   baseURL = "https://golfroad72.co.kr/";

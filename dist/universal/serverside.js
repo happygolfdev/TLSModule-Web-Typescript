@@ -38,33 +38,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var logger_1 = require("./logger");
 /**
- * @param array 반복을 돌리고 싶은 배열
- * @param callback 각 반복하는 값과 index값을 리턴하는 함수
- */
-function repeat(array, callback) {
-    return __awaiter(this, void 0, void 0, function () {
-        var index;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    index = 0;
-                    _a.label = 1;
-                case 1:
-                    if (!(index < array.length)) return [3 /*break*/, 4];
-                    return [4 /*yield*/, callback(array[index], index)];
-                case 2:
-                    _a.sent();
-                    _a.label = 3;
-                case 3:
-                    index++;
-                    return [3 /*break*/, 1];
-                case 4: return [2 /*return*/];
-            }
-        });
-    });
-}
-exports.repeat = repeat;
-/**
  * @summary 요청 응답
  * @param response 응답
  * @param resultCode 결과 코드
