@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
-var logger_1 = require("../logger");
+var logger_1 = require("../universal/logger");
 var requestResult_1 = require("./requestResult");
 var requestResultType_1 = require("./requestResultType");
 /**
@@ -78,7 +78,6 @@ var RequestManager = /** @class */ (function () {
                         data = response.data.Data;
                         result = new requestResult_1.RequestResult(requestResultType_1.RequestResultType.pSuccess, response.status, response.data.message);
                         result.data = data;
-                        logger_1.Logger.showError("aa");
                         return [2 /*return*/, result];
                     case 2:
                         error_1 = _c.sent();
@@ -110,7 +109,6 @@ var RequestManager = /** @class */ (function () {
                         _c.label = 7;
                     case 7:
                         {
-                            console.log("%");
                             result_2 = new requestResult_1.RequestResult(requestResultType_1.RequestResultType.nSuccess, status_1, error_1.response.data.message);
                             return [2 /*return*/, result_2];
                         }

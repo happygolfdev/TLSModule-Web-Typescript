@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var exampleUser_1 = require("./exampleUser");
-var logger_1 = require("../logger");
+var logger_1 = require("../universal/logger");
 var ExmapleUserManager = /** @class */ (function () {
     function ExmapleUserManager() {
         this.KEY = "tls_exmaple_user_Key";

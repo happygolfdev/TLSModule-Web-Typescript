@@ -40,7 +40,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
-var logger_1 = require("../logger");
+var logger_1 = require("../universal/logger");
 var MembershipManager = /** @class */ (function () {
     function MembershipManager() {
     }

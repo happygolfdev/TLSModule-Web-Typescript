@@ -1,6 +1,10 @@
 import axios from "axios";
 import { Logger } from "../universal/logger";
+import { MembershipUser } from "./membershipUser";
 
+/**
+ * Artilearn의 메인 DB에 사용자들의 데이터들을 관리하게 도와주는 클래스
+ */
 class MembershipManager {
   static baseURL: String = "http://13.125.19.122";
 
@@ -35,7 +39,7 @@ class MembershipManager {
   /**
    * Membership 데이터 베이스에 새로운 가입자를 추가한다
    * @param accessToken 클라이언트 서버 access token
-   * @param email 사용자 이메일
+   * @param providedID 사용자 가입 아이디(이메일, 전화번호 등등)
    * @param loginType 로그인 타입
    * @param password 비밀번호
    * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
@@ -44,7 +48,7 @@ class MembershipManager {
    */
   static async signUp(
     accessToken: String,
-    email: String,
+    providedID: String,
     loginType: Number,
     password: String,
     serviceType: Number,
@@ -57,7 +61,7 @@ class MembershipManager {
         {
           Data: {
             serviceType: serviceType,
-            email: email,
+            providedID: providedID,
             loginType: loginType,
             password: password,
             name: name,
@@ -72,10 +76,10 @@ class MembershipManager {
       );
 
       const user = response.data.Data.User;
-
       const mUser = new MembershipUser(
         user.id,
-        user.email,
+        user.uniqueID,
+        user.providedID,
         user.name,
         user.nickname,
         user.loginType
@@ -131,7 +135,8 @@ class MembershipManager {
 
       const mUser = new MembershipUser(
         user.id,
-        user.email,
+        user.uniqueID,
+        user.providedID,
         user.name,
         user.nickname,
         user.loginType
@@ -154,12 +159,12 @@ class MembershipManager {
   /**
    * Membership 사용자의 email 중복체크
    * @param accessToken 클라이언트 서버의 access token
-   * @param email 중복 체크할 이메일
+   * @param providedID 중복 체크할 사용자의 아이디
    * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
    */
   static async checkEmail(
     accessToken: String,
-    email: String,
+    providedID: String,
     serviceType: Number
   ) {
     try {
@@ -167,7 +172,7 @@ class MembershipManager {
         `${this.baseURL}/auth/user`,
         {
           Data: {
-            email: email,
+            providedID: providedID,
             serviceType: serviceType
           }
         },
@@ -179,7 +184,7 @@ class MembershipManager {
       );
 
       let user = response.data.Data.User;
-
+      console.log(user);
       if (user == null) {
         Logger.showMessage(" no Membership User found");
         return {
@@ -194,10 +199,18 @@ class MembershipManager {
       };
     } catch (error) {
       Logger.showError(error);
-      return {
-        error: error,
-        isAvailable: null
-      };
+      switch (error.response.status) {
+        case 404:
+          return {
+            error: error,
+            isAvailable: true
+          };
+        default:
+          return {
+            error: error,
+            isAvailable: null
+          };
+      }
     }
   }
 
@@ -232,7 +245,8 @@ class MembershipManager {
 
       const mUser = new MembershipUser(
         user.id,
-        user.email,
+        user.uniqueID,
+        user.providedID,
         user.name,
         user.nickname,
         user.loginType
@@ -283,7 +297,8 @@ class MembershipManager {
       const user = response.data.Data.User;
       const mUser = new MembershipUser(
         user.id,
-        user.email,
+        user.uniqueID,
+        user.providedID,
         user.name,
         user.nickname,
         user.loginType
@@ -305,26 +320,4 @@ class MembershipManager {
   }
 }
 
-class MembershipUser {
-  id: Number;
-  email: String;
-  name?: String;
-  nickname?: String;
-  loginType: Number;
-
-  constructor(
-    id: Number,
-    email: String,
-    name: String,
-    nickname: String,
-    loginType: Number
-  ) {
-    this.id = id;
-    this.email = email;
-    this.name = name;
-    this.nickname = nickname;
-    this.loginType = loginType;
-  }
-}
-
-export { MembershipManager, MembershipUser };
+export { MembershipManager };

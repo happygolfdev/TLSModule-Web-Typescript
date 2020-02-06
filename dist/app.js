@@ -36,43 +36,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var exampleRequest_1 = require("./examples/exampleRequest");
-var requestManager_1 = require("./network/requestManager");
 var exampleUser_1 = require("./examples/exampleUser");
-var logger_1 = require("./logger");
+var logger_1 = require("./universal/logger");
 var membership_1 = require("../src/membership/membership");
-function doExampleRequest() {
-    return __awaiter(this, void 0, void 0, function () {
-        var requestManager, request, body, result;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    requestManager = new requestManager_1.RequestManager();
-                    request = new exampleRequest_1.ExampleRequest(exampleRequest_1.RequestType.signIn);
-                    body = {
-                        email: "jjeui0308@gmail.com",
-                        loginType: 3,
-                        fcmToken: "adsf",
-                        provider_token: "null",
-                        password: "aaaa1111",
-                        sysLang: 0
-                    };
-                    request.addBody(body);
-                    console.log("================================================================================");
-                    return [4 /*yield*/, requestManager.request(request)];
-                case 1:
-                    result = _a.sent();
-                    console.log(result);
-                    console.log("================================================================================");
-                    return [2 /*return*/, result];
-            }
-        });
-    });
-}
-doExampleRequest();
-// repeat([1, 2, 3], async (value, idx) => {
-//   Logger.showMessage(`${idx}번째 값: ${value}`);
-// });
 var accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTc5MDA4MzgwLCJleHAiOjE1ODI2MDgzODAsImlzcyI6IkFydGlsZWFybiJ9.kkYmp6yN8HiveOjBA5ZbPst0z7Bu-KX-X-q8t1govwM";
 var clientSecretKey = "7918c66fd8d7792a73ce0730dde6823ed07b1f7d259bf3c26f5c8d3517b1d3a5a00715d71abf187208e4aa334e447752";
 function renew() {

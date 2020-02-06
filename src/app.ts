@@ -4,7 +4,7 @@ import { ExampleUser } from "./examples/exampleUser";
 import { repeat } from "./universal/universal";
 import { Logger } from "./universal/logger";
 import { ExmapleUserManager } from "./examples/exampleUserManager";
-import { MembershipManager } from "../src/membership/membership";
+import { MembershipManager } from "./membership/membershipManager";
 
 var accessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTc5MDA4MzgwLCJleHAiOjE1ODI2MDgzODAsImlzcyI6IkFydGlsZWFybiJ9.kkYmp6yN8HiveOjBA5ZbPst0z7Bu-KX-X-q8t1govwM";
@@ -19,11 +19,10 @@ async function renew() {
   Logger.showMessage(accessToken);
 }
 
-// renew();
 async function signUp() {
   const { error, status, User } = await MembershipManager.signUp(
     accessToken,
-    "mtesaat01@srg.com",
+    "mteaasaat01@srg.com",
     1,
     "asdf",
     0,
@@ -48,12 +47,11 @@ async function reset() {
 async function check() {
   const { error, isAvailable } = await MembershipManager.checkEmail(
     accessToken,
-    "jjeui0d308@gmail.com",
+    "ajjeui0308@gmail.com",
     0
   );
 
-  console.log(error);
   console.log(isAvailable);
 }
-// check();
+
 const exampleUser = new ExampleUser(1, "asdf", "Asdf", "nickname");

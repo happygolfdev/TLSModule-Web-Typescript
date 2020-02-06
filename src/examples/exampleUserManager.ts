@@ -1,6 +1,6 @@
-import { UserManager } from "../userManager";
+import { UserManager } from "../userManagement/userManager";
 import { ExampleUser } from "./exampleUser";
-import { Logger } from "../logger";
+import { Logger } from "../universal/logger";
 
 class ExmapleUserManager implements UserManager<ExampleUser> {
   KEY: String = "tls_exmaple_user_Key";
