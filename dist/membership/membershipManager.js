@@ -41,6 +41,10 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
 var logger_1 = require("../universal/logger");
+var membershipUser_1 = require("./membershipUser");
+/**
+ * Artilearn의 메인 DB에 사용자들의 데이터들을 관리하게 도와주는 클래스
+ */
 var MembershipManager = /** @class */ (function () {
     function MembershipManager() {
     }
@@ -84,14 +88,14 @@ var MembershipManager = /** @class */ (function () {
     /**
      * Membership 데이터 베이스에 새로운 가입자를 추가한다
      * @param accessToken 클라이언트 서버 access token
-     * @param email 사용자 이메일
+     * @param providedID 사용자 가입 아이디(이메일, 전화번호 등등)
      * @param loginType 로그인 타입
      * @param password 비밀번호
      * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
      * @param name 이름
      * @param nickname 닉네임
      */
-    MembershipManager.signUp = function (accessToken, email, loginType, password, serviceType, name, nickname) {
+    MembershipManager.signUp = function (accessToken, providedID, loginType, password, serviceType, name, nickname) {
         return __awaiter(this, void 0, void 0, function () {
             var response, user, mUser, error_2;
             return __generator(this, function (_a) {
@@ -101,7 +105,7 @@ var MembershipManager = /** @class */ (function () {
                         return [4 /*yield*/, axios_1.default.post(this.baseURL + "/auth/signup", {
                                 Data: {
                                     serviceType: serviceType,
-                                    email: email,
+                                    providedID: providedID,
                                     loginType: loginType,
                                     password: password,
                                     name: name,
@@ -115,7 +119,7 @@ var MembershipManager = /** @class */ (function () {
                     case 1:
                         response = _a.sent();
                         user = response.data.Data.User;
-                        mUser = new MembershipUser(user.id, user.email, user.name, user.nickname, user.loginType);
+                        mUser = new membershipUser_1.MembershipUser(user.id, user.uniqueID, user.providedID, user.name, user.nickname, user.loginType);
                         return [2 /*return*/, {
                                 error: null,
                                 status: 200,
@@ -163,7 +167,7 @@ var MembershipManager = /** @class */ (function () {
                     case 1:
                         response = _a.sent();
                         user = response.data.Data.User;
-                        mUser = new MembershipUser(user.id, user.email, user.name, user.nickname, user.loginType);
+                        mUser = new membershipUser_1.MembershipUser(user.id, user.uniqueID, user.providedID, user.name, user.nickname, user.loginType);
                         return [2 /*return*/, {
                                 error: null,
                                 status: 200,
@@ -184,10 +188,10 @@ var MembershipManager = /** @class */ (function () {
     /**
      * Membership 사용자의 email 중복체크
      * @param accessToken 클라이언트 서버의 access token
-     * @param email 중복 체크할 이메일
+     * @param providedID 중복 체크할 사용자의 아이디
      * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
      */
-    MembershipManager.checkEmail = function (accessToken, email, serviceType) {
+    MembershipManager.checkEmail = function (accessToken, providedID, serviceType) {
         return __awaiter(this, void 0, void 0, function () {
             var response, user, error_4;
             return __generator(this, function (_a) {
@@ -196,7 +200,7 @@ var MembershipManager = /** @class */ (function () {
                         _a.trys.push([0, 2, , 3]);
                         return [4 /*yield*/, axios_1.default.post(this.baseURL + "/auth/user", {
                                 Data: {
-                                    email: email,
+                                    providedID: providedID,
                                     serviceType: serviceType
                                 }
                             }, {
@@ -207,6 +211,7 @@ var MembershipManager = /** @class */ (function () {
                     case 1:
                         response = _a.sent();
                         user = response.data.Data.User;
+                        console.log(user);
                         if (user == null) {
                             logger_1.Logger.showMessage(" no Membership User found");
                             return [2 /*return*/, {
@@ -221,10 +226,19 @@ var MembershipManager = /** @class */ (function () {
                     case 2:
                         error_4 = _a.sent();
                         logger_1.Logger.showError(error_4);
-                        return [2 /*return*/, {
-                                error: error_4,
-                                isAvailable: null
-                            }];
+                        switch (error_4.response.status) {
+                            case 404:
+                                return [2 /*return*/, {
+                                        error: error_4,
+                                        isAvailable: true
+                                    }];
+                            default:
+                                return [2 /*return*/, {
+                                        error: error_4,
+                                        isAvailable: null
+                                    }];
+                        }
+                        return [3 /*break*/, 3];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -257,7 +271,7 @@ var MembershipManager = /** @class */ (function () {
                     case 1:
                         response = _a.sent();
                         user = response.data.Data.User;
-                        mUser = new MembershipUser(user.id, user.email, user.name, user.nickname, user.loginType);
+                        mUser = new membershipUser_1.MembershipUser(user.id, user.uniqueID, user.providedID, user.name, user.nickname, user.loginType);
                         return [2 /*return*/, {
                                 error: null,
                                 status: 200,
@@ -302,7 +316,7 @@ var MembershipManager = /** @class */ (function () {
                     case 1:
                         response = _a.sent();
                         user = response.data.Data.User;
-                        mUser = new MembershipUser(user.id, user.email, user.name, user.nickname, user.loginType);
+                        mUser = new membershipUser_1.MembershipUser(user.id, user.uniqueID, user.providedID, user.name, user.nickname, user.loginType);
                         return [2 /*return*/, {
                                 error: null,
                                 status: 200,
@@ -325,14 +339,3 @@ var MembershipManager = /** @class */ (function () {
     return MembershipManager;
 }());
 exports.MembershipManager = MembershipManager;
-var MembershipUser = /** @class */ (function () {
-    function MembershipUser(id, email, name, nickname, loginType) {
-        this.id = id;
-        this.email = email;
-        this.name = name;
-        this.nickname = nickname;
-        this.loginType = loginType;
-    }
-    return MembershipUser;
-}());
-exports.MembershipUser = MembershipUser;

@@ -38,7 +38,8 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var exampleUser_1 = require("./examples/exampleUser");
 var logger_1 = require("./universal/logger");
-var membership_1 = require("../src/membership/membership");
+var membershipManager_1 = require("./membership/membershipManager");
+var impactVisionAuthentication_1 = require("./ImpactVision/impactVisionAuthentication");
 var accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTc5MDA4MzgwLCJleHAiOjE1ODI2MDgzODAsImlzcyI6IkFydGlsZWFybiJ9.kkYmp6yN8HiveOjBA5ZbPst0z7Bu-KX-X-q8t1govwM";
 var clientSecretKey = "7918c66fd8d7792a73ce0730dde6823ed07b1f7d259bf3c26f5c8d3517b1d3a5a00715d71abf187208e4aa334e447752";
 function renew() {
@@ -46,7 +47,7 @@ function renew() {
         var _a, newToken, error;
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0: return [4 /*yield*/, membership_1.MembershipManager.renewAccessToken(clientSecretKey)];
+                case 0: return [4 /*yield*/, membershipManager_1.MembershipManager.renewAccessToken(clientSecretKey)];
                 case 1:
                     _a = _b.sent(), newToken = _a.newToken, error = _a.error;
                     accessToken = newToken;
@@ -56,13 +57,83 @@ function renew() {
         });
     });
 }
-// renew();
+var imvAuth = new impactVisionAuthentication_1.ImpactVisionAuthentication();
+function signUpForIV() {
+    return __awaiter(this, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, imvAuth.signUp(0, "test09", "justinji", "01067991866", "justin")];
+                case 1:
+                    result = _a.sent();
+                    console.log(result);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function userList() {
+    return __awaiter(this, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, imvAuth.getUserList(0, 0)];
+                case 1:
+                    result = _a.sent();
+                    console.log(result.data.users);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function userUpdate() {
+    return __awaiter(this, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, imvAuth.update(0, "test08", "aaaa1111", "new name", "new nicname", "01022222222")];
+                case 1:
+                    result = _a.sent();
+                    console.log(result);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function userDelete() {
+    return __awaiter(this, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, imvAuth.deleteUser(0, "test09", "aaaa1111")];
+                case 1:
+                    result = _a.sent();
+                    console.log(result);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function checkImpactVisionUsername() {
+    return __awaiter(this, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, imvAuth.checkUsername(0, "test09")];
+                case 1:
+                    result = _a.sent();
+                    console.log(result);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
 function signUp() {
     return __awaiter(this, void 0, void 0, function () {
         var _a, error, status, User;
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0: return [4 /*yield*/, membership_1.MembershipManager.signUp(accessToken, "mtesaat01@srg.com", 1, "asdf", 0, "nickname")];
+                case 0: return [4 /*yield*/, membershipManager_1.MembershipManager.signUp(accessToken, "mteaasaat01@srg.com", 1, "asdf", 0, "nickname")];
                 case 1:
                     _a = _b.sent(), error = _a.error, status = _a.status, User = _a.User;
                     console.log(error);
@@ -78,7 +149,7 @@ function reset() {
         var _a, error, status, User;
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0: return [4 /*yield*/, membership_1.MembershipManager.resetPassword(accessToken, 11, "null")];
+                case 0: return [4 /*yield*/, membershipManager_1.MembershipManager.resetPassword(accessToken, 11, "null")];
                 case 1:
                     _a = _b.sent(), error = _a.error, status = _a.status, User = _a.User;
                     console.log(error);
@@ -94,15 +165,13 @@ function check() {
         var _a, error, isAvailable;
         return __generator(this, function (_b) {
             switch (_b.label) {
-                case 0: return [4 /*yield*/, membership_1.MembershipManager.checkEmail(accessToken, "jjeui0d308@gmail.com", 0)];
+                case 0: return [4 /*yield*/, membershipManager_1.MembershipManager.checkEmail(accessToken, "ajajeui0308@gmail.com", 0)];
                 case 1:
                     _a = _b.sent(), error = _a.error, isAvailable = _a.isAvailable;
-                    console.log(error);
                     console.log(isAvailable);
                     return [2 /*return*/];
             }
         });
     });
 }
-// check();
 var exampleUser = new exampleUser_1.ExampleUser(1, "asdf", "Asdf", "nickname");
