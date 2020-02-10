@@ -45,6 +45,7 @@ class MembershipManager {
    * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
    * @param name 이름
    * @param nickname 닉네임
+   * @param branchID 행복골프GO 가입시 지점번호
    */
   static async signUp(
     accessToken: String,
@@ -53,7 +54,8 @@ class MembershipManager {
     password: String,
     serviceType: Number,
     name?: String,
-    nickname?: String
+    nickname?: String,
+    branchID?: Number
   ) {
     try {
       const response = await axios.post(
@@ -65,7 +67,8 @@ class MembershipManager {
             loginType: loginType,
             password: password,
             name: name,
-            nickname: nickname
+            nickname: nickname,
+            branchID: branchID
           }
         },
         {
@@ -106,13 +109,15 @@ class MembershipManager {
    * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
    * @param name 변경할 사용자의 이름
    * @param nickname 변경할 사용자의 닉네임
+   * @param branchID 행복골프GO 가입시 지점번호
    */
   static async update(
     accessToken: String,
     id: Number,
     serviceType: Number,
     name?: String,
-    nickname?: String
+    nickname?: String,
+    branchID?: Number
   ) {
     try {
       const response = await axios.put(
@@ -122,7 +127,8 @@ class MembershipManager {
             userID: id,
             serviceType: serviceType,
             name: name,
-            nickname: nickname
+            nickname: nickname,
+            branchID: branchID
           }
         },
         {
@@ -184,7 +190,7 @@ class MembershipManager {
       );
 
       let user = response.data.Data.User;
-      console.log(user);
+
       if (user == null) {
         Logger.showMessage(" no Membership User found");
         return {

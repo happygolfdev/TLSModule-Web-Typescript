@@ -9,21 +9,21 @@ class ImpactVisionAuthentication {
 
   /**
    *
-   * @param branchID 훈련소 지점
-   * @param id
-   * @param name
-   * @param mobile
-   * @param nickname
+   * @param branchID 훈련소 지점 번호
+   * @param username 아이디
+   * @param name 이름
+   * @param mobile 휴대폰 번호
+   * @param nickname 닉네임
    */
   public async signUp(
     branchID: Number,
-    id: String,
+    username: String,
     name: String,
     mobile: String,
     nickname?: String
   ) {
     try {
-      const password = await this.createPassword(id, name, mobile);
+      const password = await this.createPassword(username, name, mobile);
       const shopID = this.getBranchInfo(branchID)?.id;
 
       var url = [
@@ -31,7 +31,7 @@ class ImpactVisionAuthentication {
         `shop_pid=${this.shopPID}`,
         `&shop_id=${shopID}`,
         `&shop_key=${this.shopKey}`,
-        `&ivm_id=${id}`,
+        `&ivm_id=${username}`,
         `&ivm_pw=${password}`,
         `&ivm_name=${name}`,
         `&ivm_nick=${nickname}`,
@@ -55,6 +55,15 @@ class ImpactVisionAuthentication {
     }
   }
 
+  /**
+   * Impact Vision 계정 정보를 업데이트 합니다.
+   * @param branchID 지점 번호
+   * @param username 아이디
+   * @param password 비밀번호
+   * @param name 이름
+   * @param nickname 닉네임
+   * @param mobile 휴대폰 번호
+   */
   public async update(
     branchID: Number,
     username: String,
@@ -86,7 +95,7 @@ class ImpactVisionAuthentication {
         url.push(`&ivm_nick=${nickname}`);
       }
 
-      if (name != null) {
+      if (mobile != null) {
         url.push(`&ivm_hp=${mobile}`);
       }
 
@@ -101,6 +110,12 @@ class ImpactVisionAuthentication {
     }
   }
 
+  /**
+   * Impact Vision 계정을 삭제합니다.
+   * @param branchID 지점 번호
+   * @param username 아이디
+   * @param password 비밀번호
+   */
   public async deleteUser(
     branchID: Number,
     username: String,
@@ -132,6 +147,11 @@ class ImpactVisionAuthentication {
     }
   }
 
+  /**
+   * Impact Vision DB에서 사용자 아이디 중복검색을 합니다.
+   * @param branchID 지점 번호
+   * @param username 중복 검색할 아이디
+   */
   public async checkUsername(branchID: Number, username: String) {
     try {
       const shopID = this.getBranchInfo(branchID)?.id;
@@ -147,16 +167,28 @@ class ImpactVisionAuthentication {
       ];
 
       const response = await Axios.get(url.join(""));
+
+      const isAvailable =
+        response.data.impactvision.result_code == "SUCCESS" ? false : true;
+
       return {
-        resultCode: response.data.impactvision.result_code,
-        resultMessage: response.data.impactvision.result_message
+        error: null,
+        isAvailable: isAvailable
       };
     } catch (error) {
       Logger.showError(String(error));
-      return error;
+      return {
+        error: error,
+        isAvailable: false
+      };
     }
   }
 
+  /**
+   * 사용자 목록보기
+   * @param pageIndex 검색할 리스트의 index
+   * @param branchID 지점 번호
+   */
   public async getUserList(pageIndex: Number, branchID: Number) {
     try {
       const shopID = this.getBranchInfo(branchID)?.id;
