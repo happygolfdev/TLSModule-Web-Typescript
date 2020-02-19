@@ -52,7 +52,6 @@ var MembershipManager = /** @class */ (function () {
      * 클라이언트 서버의 Access Token을 갱신한다.
      * @param clientSecretKey 클라이언트 서버에 주어진 보안키
      * @returns newToken: String?, error: any?
-     * //MARK: Access Token 갱신
      */
     MembershipManager.renewAccessToken = function (clientSecretKey) {
         return __awaiter(this, void 0, void 0, function () {
@@ -91,11 +90,12 @@ var MembershipManager = /** @class */ (function () {
      * @param providedID 사용자 가입 아이디(이메일, 전화번호 등등)
      * @param loginType 로그인 타입
      * @param password 비밀번호
-     * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
+     * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0, 행복골프GO: 1)
      * @param name 이름
      * @param nickname 닉네임
+     * @param branchID 행복골프GO 가입시 지점번호
      */
-    MembershipManager.signUp = function (accessToken, providedID, loginType, password, serviceType, name, nickname) {
+    MembershipManager.signUp = function (accessToken, providedID, loginType, password, serviceType, name, nickname, branchID) {
         return __awaiter(this, void 0, void 0, function () {
             var response, user, mUser, error_2;
             return __generator(this, function (_a) {
@@ -109,7 +109,8 @@ var MembershipManager = /** @class */ (function () {
                                     loginType: loginType,
                                     password: password,
                                     name: name,
-                                    nickname: nickname
+                                    nickname: nickname,
+                                    branchID: branchID
                                 }
                             }, {
                                 headers: {
@@ -141,11 +142,12 @@ var MembershipManager = /** @class */ (function () {
      * 사용자 정보 업데이트
      * @param accessToken 클라이언트 서버의 access token
      * @param id Membership User의 id
-     * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
+     * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0, 행복골프GO: 1)
      * @param name 변경할 사용자의 이름
      * @param nickname 변경할 사용자의 닉네임
+     * @param branchID 행복골프GO 가입시 지점번호
      */
-    MembershipManager.update = function (accessToken, id, serviceType, name, nickname) {
+    MembershipManager.update = function (accessToken, id, serviceType, name, nickname, branchID) {
         return __awaiter(this, void 0, void 0, function () {
             var response, user, mUser, error_3;
             return __generator(this, function (_a) {
@@ -157,7 +159,8 @@ var MembershipManager = /** @class */ (function () {
                                     userID: id,
                                     serviceType: serviceType,
                                     name: name,
-                                    nickname: nickname
+                                    nickname: nickname,
+                                    branchID: branchID
                                 }
                             }, {
                                 headers: {
@@ -189,7 +192,7 @@ var MembershipManager = /** @class */ (function () {
      * Membership 사용자의 email 중복체크
      * @param accessToken 클라이언트 서버의 access token
      * @param providedID 중복 체크할 사용자의 아이디
-     * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
+     * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0, 행복골프GO: 1)
      */
     MembershipManager.checkEmail = function (accessToken, providedID, serviceType) {
         return __awaiter(this, void 0, void 0, function () {
@@ -211,16 +214,17 @@ var MembershipManager = /** @class */ (function () {
                     case 1:
                         response = _a.sent();
                         user = response.data.Data.User;
-                        console.log(user);
                         if (user == null) {
                             logger_1.Logger.showMessage(" no Membership User found");
                             return [2 /*return*/, {
                                     error: null,
+                                    status: response.status,
                                     isAvailable: true
                                 }];
                         }
                         return [2 /*return*/, {
                                 error: null,
+                                status: response.status,
                                 isAvailable: false
                             }];
                     case 2:
@@ -229,12 +233,14 @@ var MembershipManager = /** @class */ (function () {
                         switch (error_4.response.status) {
                             case 404:
                                 return [2 /*return*/, {
-                                        error: error_4,
+                                        error: null,
+                                        status: 200,
                                         isAvailable: true
                                     }];
                             default:
                                 return [2 /*return*/, {
                                         error: error_4,
+                                        status: error_4.response.status,
                                         isAvailable: null
                                     }];
                         }
@@ -294,7 +300,7 @@ var MembershipManager = /** @class */ (function () {
      *
      * @param accessToken 클라이언트 서버의 access token
      * @param id Membership User의 id
-     * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
+     * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0, 행복골프GO: 1)
      */
     MembershipManager.deactivate = function (accessToken, id, serviceType) {
         return __awaiter(this, void 0, void 0, function () {

@@ -12,7 +12,6 @@ class MembershipManager {
    * 클라이언트 서버의 Access Token을 갱신한다.
    * @param clientSecretKey 클라이언트 서버에 주어진 보안키
    * @returns newToken: String?, error: any?
-   * //MARK: Access Token 갱신
    */
   static async renewAccessToken(clientSecretKey: String) {
     try {
@@ -42,7 +41,7 @@ class MembershipManager {
    * @param providedID 사용자 가입 아이디(이메일, 전화번호 등등)
    * @param loginType 로그인 타입
    * @param password 비밀번호
-   * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
+   * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0, 행복골프GO: 1)
    * @param name 이름
    * @param nickname 닉네임
    * @param branchID 행복골프GO 가입시 지점번호
@@ -106,7 +105,7 @@ class MembershipManager {
    * 사용자 정보 업데이트
    * @param accessToken 클라이언트 서버의 access token
    * @param id Membership User의 id
-   * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
+   * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0, 행복골프GO: 1)
    * @param name 변경할 사용자의 이름
    * @param nickname 변경할 사용자의 닉네임
    * @param branchID 행복골프GO 가입시 지점번호
@@ -166,7 +165,7 @@ class MembershipManager {
    * Membership 사용자의 email 중복체크
    * @param accessToken 클라이언트 서버의 access token
    * @param providedID 중복 체크할 사용자의 아이디
-   * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
+   * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0, 행복골프GO: 1)
    */
   static async checkEmail(
     accessToken: String,
@@ -195,12 +194,14 @@ class MembershipManager {
         Logger.showMessage(" no Membership User found");
         return {
           error: null,
+          status: response.status,
           isAvailable: true
         };
       }
 
       return {
         error: null,
+        status: response.status,
         isAvailable: false
       };
     } catch (error) {
@@ -208,12 +209,14 @@ class MembershipManager {
       switch (error.response.status) {
         case 404:
           return {
-            error: error,
+            error: null,
+            status: 200,
             isAvailable: true
           };
         default:
           return {
             error: error,
+            status: error.response.status,
             isAvailable: null
           };
       }
@@ -277,7 +280,7 @@ class MembershipManager {
    *
    * @param accessToken 클라이언트 서버의 access token
    * @param id Membership User의 id
-   * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0)
+   * @param serviceType 클라이언트 서비스 번호(GolfRoad72: 0, 행복골프GO: 1)
    */
   static async deactivate(
     accessToken: String,

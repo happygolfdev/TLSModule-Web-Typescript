@@ -50,13 +50,13 @@ var ImpactVisionAuthentication = /** @class */ (function () {
     }
     /**
      *
-     * @param branchID 훈련소 지점
-     * @param id
-     * @param name
-     * @param mobile
-     * @param nickname
+     * @param branchID 훈련소 지점 번호
+     * @param username 아이디
+     * @param name 이름
+     * @param mobile 휴대폰 번호
+     * @param nickname 닉네임
      */
-    ImpactVisionAuthentication.prototype.signUp = function (branchID, id, name, mobile, nickname) {
+    ImpactVisionAuthentication.prototype.signUp = function (branchID, username, name, mobile, nickname) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
             var password, shopID, url, response, isSuccessful, error_1;
@@ -64,7 +64,7 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                 switch (_b.label) {
                     case 0:
                         _b.trys.push([0, 3, , 4]);
-                        return [4 /*yield*/, this.createPassword(id, name, mobile)];
+                        return [4 /*yield*/, this.createPassword(username, name, mobile)];
                     case 1:
                         password = _b.sent();
                         shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
@@ -73,7 +73,7 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                             "shop_pid=" + this.shopPID,
                             "&shop_id=" + shopID,
                             "&shop_key=" + this.shopKey,
-                            "&ivm_id=" + id,
+                            "&ivm_id=" + username,
                             "&ivm_pw=" + password,
                             "&ivm_name=" + name,
                             "&ivm_nick=" + nickname,
@@ -99,6 +99,15 @@ var ImpactVisionAuthentication = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Impact Vision 계정 정보를 업데이트 합니다.
+     * @param branchID 지점 번호
+     * @param username 아이디
+     * @param password 비밀번호
+     * @param name 이름
+     * @param nickname 닉네임
+     * @param mobile 휴대폰 번호
+     */
     ImpactVisionAuthentication.prototype.update = function (branchID, username, password, name, nickname, mobile) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
@@ -126,7 +135,7 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                         if (nickname != null) {
                             url.push("&ivm_nick=" + nickname);
                         }
-                        if (name != null) {
+                        if (mobile != null) {
                             url.push("&ivm_hp=" + mobile);
                         }
                         return [4 /*yield*/, axios_1.default.get(url.join(""))];
@@ -145,6 +154,12 @@ var ImpactVisionAuthentication = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Impact Vision 계정을 삭제합니다.
+     * @param branchID 지점 번호
+     * @param username 아이디
+     * @param password 비밀번호
+     */
     ImpactVisionAuthentication.prototype.deleteUser = function (branchID, username, password) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
@@ -182,10 +197,15 @@ var ImpactVisionAuthentication = /** @class */ (function () {
             });
         });
     };
+    /**
+     * Impact Vision DB에서 사용자 아이디 중복검색을 합니다.
+     * @param branchID 지점 번호
+     * @param username 중복 검색할 아이디
+     */
     ImpactVisionAuthentication.prototype.checkUsername = function (branchID, username) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var shopID, url, response, error_4;
+            var shopID, url, response, isAvailable, error_4;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -204,19 +224,28 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                         return [4 /*yield*/, axios_1.default.get(url.join(""))];
                     case 1:
                         response = _b.sent();
+                        isAvailable = response.data.impactvision.result_code == "SUCCESS" ? false : true;
                         return [2 /*return*/, {
-                                resultCode: response.data.impactvision.result_code,
-                                resultMessage: response.data.impactvision.result_message
+                                error: null,
+                                isAvailable: isAvailable
                             }];
                     case 2:
                         error_4 = _b.sent();
                         logger_1.Logger.showError(String(error_4));
-                        return [2 /*return*/, error_4];
+                        return [2 /*return*/, {
+                                error: error_4,
+                                isAvailable: false
+                            }];
                     case 3: return [2 /*return*/];
                 }
             });
         });
     };
+    /**
+     * 사용자 목록보기
+     * @param pageIndex 검색할 리스트의 index
+     * @param branchID 지점 번호
+     */
     ImpactVisionAuthentication.prototype.getUserList = function (pageIndex, branchID) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
@@ -288,12 +317,22 @@ var ImpactVisionAuthentication = /** @class */ (function () {
     };
     ImpactVisionAuthentication.getBranchID = function (branchID) {
         switch (branchID) {
-            case "ivm060117":
+            case "ivm060117": //삼성
                 return 0;
-            case "ivm130147":
+            case "ivm130147": //위례
                 return 1;
-            case "ivm020109":
+            case "ivm020109": //성북
                 return 2;
+            case "반포":
+                return 3;
+            case "잠실":
+                return 4;
+            case "평촌":
+                return 5;
+            case "정자":
+                return 6;
+            case "의왕":
+                return 7;
             default:
                 return 999;
         }

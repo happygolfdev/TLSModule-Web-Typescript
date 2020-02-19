@@ -38,7 +38,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var logger_1 = require("./logger");
 /**
- * @summary 요청 응답
+ * 요청 응답
  * @param response 응답
  * @param resultCode 결과 코드
  * @param message 메세지

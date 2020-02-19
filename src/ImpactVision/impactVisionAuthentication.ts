@@ -247,18 +247,28 @@ class ImpactVisionAuthentication {
 
   static getBranchID(branchID: String) {
     switch (branchID) {
-      case "ivm060117":
+      case "ivm060117": //삼성
         return 0;
-      case "ivm130147":
+      case "ivm130147": //위례
         return 1;
-      case "ivm020109":
+      case "ivm020109": //성북
         return 2;
+      case "반포":
+        return 3;
+      case "잠실":
+        return 4;
+      case "평촌":
+        return 5;
+      case "정자":
+        return 6;
+      case "의왕":
+        return 7;
       default:
         return 999;
     }
   }
 
-  private async createPassword(id: String, name: String, mobile: String) {
+  async createPassword(id: String, name: String, mobile: String) {
     return `${id}_${name}_${mobile}`;
   }
 }
