@@ -1,4 +1,4 @@
-import { ImpactVisionAuthentication } from "./impactVisionAuthentication";
+import { ImpactVisionManager } from "./impactVisionManager";
 
 class ImpactVisionUser {
   id: Number;
@@ -16,7 +16,7 @@ class ImpactVisionUser {
     this.name = object.ivm_name;
     this.nickname = object.ivm_nick;
     this.mobile = object.ivm_hp;
-    this.branchID = ImpactVisionAuthentication.getBranchID(object.shop_id);
+    this.branchID = ImpactVisionManager.getBranchID(object.shop_id);
   }
 }
 

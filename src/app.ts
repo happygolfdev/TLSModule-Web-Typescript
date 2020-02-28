@@ -5,7 +5,7 @@ import { repeat } from "./universal/universal";
 import { Logger } from "./universal/logger";
 import { ExmapleUserManager } from "./examples/exampleUserManager";
 import { MembershipManager } from "./membership/membershipManager";
-import { ImpactVisionAuthentication } from "./ImpactVision/impactVisionAuthentication";
+import { ImpactVisionManager } from "./ImpactVision/impactVisionManager";
 
 var accessToken =
   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTc5MDA4MzgwLCJleHAiOjE1ODI2MDgzODAsImlzcyI6IkFydGlsZWFybiJ9.kkYmp6yN8HiveOjBA5ZbPst0z7Bu-KX-X-q8t1govwM";
@@ -19,9 +19,9 @@ async function renew() {
   accessToken = newToken;
   Logger.showMessage(accessToken);
 }
-const imvAuth = new ImpactVisionAuthentication();
+const ivManager = new ImpactVisionManager();
 async function signUpForIV() {
-  const result = await imvAuth.signUp(
+  const result = await ivManager.signUp(
     0,
     "test09",
     "justinji",
@@ -32,12 +32,17 @@ async function signUpForIV() {
 }
 
 async function userList() {
-  const result = await imvAuth.getUserList(0, 0);
+  const result = await ivManager.getUserList(0, 0);
   console.log(result.data.users);
 }
 
+async function plateList() {
+  const result = await ivManager.getPlateList(0);
+  console.log(result.Data.Plates);
+}
+
 async function userUpdate() {
-  const result = await imvAuth.update(
+  const result = await ivManager.update(
     0,
     "test08",
     "aaaa1111",
@@ -48,12 +53,12 @@ async function userUpdate() {
   console.log(result);
 }
 async function userDelete() {
-  const result = await imvAuth.deleteUser(0, "test09", "aaaa1111");
+  const result = await ivManager.deleteUser(0, "test09", "aaaa1111");
   console.log(result);
 }
 
 async function checkImpactVisionUsername() {
-  const result = await imvAuth.checkUsername(0, "test09");
+  const result = await ivManager.checkUsername(0, "test09");
   console.log(result);
 }
 

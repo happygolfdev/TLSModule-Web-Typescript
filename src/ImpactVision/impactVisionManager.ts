@@ -1,11 +1,15 @@
 import Axios from "axios";
 import { Logger } from "../universal/logger";
 import { ImpactVisionUser } from "./impactVisionUser";
+import { ImpactVisionPlate } from "./impactVisionPlate";
 
-class ImpactVisionAuthentication {
-  baseURL = "http://my.impactvision.co.kr/webapi/callback.php";
-  shopPID = "happy_gf";
-  shopKey = "MjdsMUxkME02Nk1GM2RiU2J2eVJqd2tuK2xKZE0rT3NBdkVSbU1SSXppcz0";
+class ImpactVisionManager {
+  BASE_URL = "http://my.impactvision.co.kr/webapi";
+  AUTH_ENDPOINT = "/callback.php";
+  PLATE_CONTROL_ENPOINT = "/ctrl.php";
+
+  SHOP_PID = "happy_gf";
+  SHOP_KEY = "MjdsMUxkME02Nk1GM2RiU2J2eVJqd2tuK2xKZE0rT3NBdkVSbU1SSXppcz0";
 
   /**
    *
@@ -27,10 +31,10 @@ class ImpactVisionAuthentication {
       const shopID = this.getBranchInfo(branchID)?.id;
 
       var url = [
-        `${this.baseURL}?st_type=Join&`,
-        `shop_pid=${this.shopPID}`,
+        `${this.BASE_URL}${this.AUTH_ENDPOINT}?st_type=Join&`,
+        `shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
-        `&shop_key=${this.shopKey}`,
+        `&shop_key=${this.SHOP_KEY}`,
         `&ivm_id=${username}`,
         `&ivm_pw=${password}`,
         `&ivm_name=${name}`,
@@ -39,15 +43,23 @@ class ImpactVisionAuthentication {
       ].join("");
 
       const response = await Axios.get(url);
-      const isSuccessful =
-        response.data.impactvision.result_code == "SUCCESS" ? true : false;
+      const resultCode = response.data.impactvision.result_code;
+      if (resultCode == "FAIL") {
+        return {
+          resultCode: resultCode,
+          resultMessage: response.data.impactvision.result_message,
+          Data: {
+            User: null
+          }
+        };
+      }
 
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        data: isSuccessful
-          ? new ImpactVisionUser(response.data.impactvision.member_info)
-          : null
+        Data: {
+          User: new ImpactVisionUser(response.data.impactvision.member_info)
+        }
       };
     } catch (error) {
       Logger.showError(String(error));
@@ -78,10 +90,10 @@ class ImpactVisionAuthentication {
         return null;
       }
       const url = [
-        `${this.baseURL}?st_type=Edit`,
-        `&shop_pid=${this.shopPID}`,
+        `${this.BASE_URL}${this.AUTH_ENDPOINT}?st_type=Edit`,
+        `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
-        `&shop_key=${this.shopKey}`,
+        `&shop_key=${this.SHOP_KEY}`,
         `&ivm_id=${username}`,
         `&ivm_pw=${password}`,
         `&ivm_pw_edit=${password}`
@@ -100,9 +112,11 @@ class ImpactVisionAuthentication {
       }
 
       const response = await Axios.get(url.join(""));
+
       return {
         resultCode: response.data.impactvision.result_code,
-        resultMessage: response.data.impactvision.result_message
+        resultMessage: response.data.impactvision.result_message,
+        Data: null
       };
     } catch (error) {
       Logger.showError(String(error));
@@ -127,10 +141,10 @@ class ImpactVisionAuthentication {
         return null;
       }
       const url = [
-        `${this.baseURL}?st_type=Delete`,
-        `&shop_pid=${this.shopPID}`,
+        `${this.BASE_URL}${this.AUTH_ENDPOINT}?st_type=Delete`,
+        `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
-        `&shop_key=${this.shopKey}`,
+        `&shop_key=${this.SHOP_KEY}`,
         `&ivm_id=${username}`,
         `&ivm_pw=${password}`,
         `&ivm_pw_edit=${password}`
@@ -139,7 +153,8 @@ class ImpactVisionAuthentication {
       const response = await Axios.get(url.join(""));
       return {
         resultCode: response.data.impactvision.result_code,
-        resultMessage: response.data.impactvision.result_message
+        resultMessage: response.data.impactvision.result_message,
+        Data: null
       };
     } catch (error) {
       Logger.showError(String(error));
@@ -159,10 +174,10 @@ class ImpactVisionAuthentication {
         return null;
       }
       const url = [
-        `${this.baseURL}?st_type=Idcheck`,
-        `&shop_pid=${this.shopPID}`,
+        `${this.BASE_URL}${this.AUTH_ENDPOINT}?st_type=Idcheck`,
+        `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
-        `&shop_key=${this.shopKey}`,
+        `&shop_key=${this.SHOP_KEY}`,
         `&ivm_id=${username}`
       ];
 
@@ -193,17 +208,27 @@ class ImpactVisionAuthentication {
     try {
       const shopID = this.getBranchInfo(branchID)?.id;
       const url = [
-        `${this.baseURL}?st_type=List`,
+        `${this.BASE_URL}${this.AUTH_ENDPOINT}?st_type=List`,
         `&page_idx=${pageIndex}`,
         `&page_line=100`,
-        `&shop_pid=${this.shopPID}`,
+        `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
-        `&shop_key=${this.shopKey}`
+        `&shop_key=${this.SHOP_KEY}`
       ].join("");
 
-      const response = await Axios.post(url);
+      const response = await Axios.get(url);
+      const resultCode = response.data.impactvision.result_code;
+      if (resultCode == "FAIL") {
+        return {
+          resultCode: resultCode,
+          resultMessage: response.data.impactvision.result_message,
+          Data: {
+            Users: null
+          }
+        };
+      }
+
       const usersObjArray = response.data.impactvision.member_info;
-      console.log(response);
       const users: ImpactVisionUser[] = await usersObjArray.map(
         async (userObj: any) => {
           return await new ImpactVisionUser(userObj);
@@ -213,9 +238,98 @@ class ImpactVisionAuthentication {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        data: {
+        Data: {
           Users: users
         }
+      };
+    } catch (error) {
+      Logger.showError(String(error));
+      return error;
+    }
+  }
+
+  public async getPlateList(branchID: Number) {
+    try {
+      const shopID = this.getBranchInfo(branchID)?.id;
+      const url = [
+        `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=List`,
+        `&shop_pid=${this.SHOP_PID}`,
+        `&shop_id=${shopID}d`,
+        `&shop_key=${this.SHOP_KEY}`
+      ].join("");
+
+      const response = await Axios.get(url);
+      const resultCode = response.data.impactvision.result_code;
+      if (resultCode == "FAIL") {
+        return {
+          resultCode: resultCode,
+          resultMessage: response.data.impactvision.result_message,
+          Data: {
+            Plates: null
+          }
+        };
+      }
+
+      const plateArray = response.data.impactvision.client_info;
+      const plates: ImpactVisionPlate[] = plateArray.map((plateObj: any) => {
+        return new ImpactVisionPlate(plateObj);
+      });
+
+      return {
+        resultCode: response.data.impactvision.result_code,
+        resultMessage: response.data.impactvision.result_message,
+        Data: {
+          Plates: plates
+        }
+      };
+    } catch (error) {
+      Logger.showError(String(error));
+      return error;
+    }
+  }
+
+  public async openPlate(branchID: Number, lockKey: String, duration: Number) {
+    try {
+      const shopID = this.getBranchInfo(branchID)?.id;
+      const url = [
+        `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=Ctrl`,
+        `&shop_pid=${this.SHOP_PID}`,
+        `&shop_id=${shopID}`,
+        `&shop_key=${this.SHOP_KEY}`,
+        `client_lock_key=${lockKey}`,
+        `client_lock_mode=unlock`,
+        `client_lock_time=${duration}`
+      ].join("");
+
+      const response = await Axios.get(url);
+      return {
+        resultCode: response.data.impactvision.result_code,
+        resultMessage: response.data.impactvision.result_message,
+        Data: null
+      };
+    } catch (error) {
+      Logger.showError(String(error));
+      return error;
+    }
+  }
+
+  public async shutPlate(branchID: Number, lockKey: String) {
+    try {
+      const shopID = this.getBranchInfo(branchID)?.id;
+      const url = [
+        `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=Ctrl`,
+        `&shop_pid=${this.SHOP_PID}`,
+        `&shop_id=${shopID}`,
+        `&shop_key=${this.SHOP_KEY}`,
+        `client_lock_key=${lockKey}`,
+        `client_lock_mode=lock`
+      ].join("");
+
+      const response = await Axios.get(url);
+      return {
+        resultCode: response.data.impactvision.result_code,
+        resultMessage: response.data.impactvision.result_message,
+        Data: null
       };
     } catch (error) {
       Logger.showError(String(error));
@@ -273,4 +387,4 @@ class ImpactVisionAuthentication {
   }
 }
 
-export { ImpactVisionAuthentication };
+export { ImpactVisionManager };
