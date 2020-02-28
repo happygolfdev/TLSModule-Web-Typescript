@@ -42,11 +42,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var axios_1 = __importDefault(require("axios"));
 var logger_1 = require("../universal/logger");
 var impactVisionUser_1 = require("./impactVisionUser");
-var ImpactVisionAuthentication = /** @class */ (function () {
-    function ImpactVisionAuthentication() {
-        this.baseURL = "http://my.impactvision.co.kr/webapi/callback.php";
-        this.shopPID = "happy_gf";
-        this.shopKey = "MjdsMUxkME02Nk1GM2RiU2J2eVJqd2tuK2xKZE0rT3NBdkVSbU1SSXppcz0";
+var impactVisionPlate_1 = require("./impactVisionPlate");
+var ImpactVisionManager = /** @class */ (function () {
+    function ImpactVisionManager() {
+        this.BASE_URL = "http://my.impactvision.co.kr/webapi";
+        this.AUTH_ENDPOINT = "/callback.php";
+        this.PLATE_CONTROL_ENPOINT = "/ctrl.php";
+        this.SHOP_PID = "happy_gf";
+        this.SHOP_KEY = "MjdsMUxkME02Nk1GM2RiU2J2eVJqd2tuK2xKZE0rT3NBdkVSbU1SSXppcz0";
     }
     /**
      *
@@ -56,10 +59,10 @@ var ImpactVisionAuthentication = /** @class */ (function () {
      * @param mobile 휴대폰 번호
      * @param nickname 닉네임
      */
-    ImpactVisionAuthentication.prototype.signUp = function (branchID, username, name, mobile, nickname) {
+    ImpactVisionManager.prototype.signUp = function (branchID, username, name, mobile, nickname) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var password, shopID, url, response, isSuccessful, error_1;
+            var password, shopID, url, response, resultCode, error_1;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -69,10 +72,10 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                         password = _b.sent();
                         shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
                         url = [
-                            this.baseURL + "?st_type=Join&",
-                            "shop_pid=" + this.shopPID,
+                            "" + this.BASE_URL + this.AUTH_ENDPOINT + "?st_type=Join&",
+                            "shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
-                            "&shop_key=" + this.shopKey,
+                            "&shop_key=" + this.SHOP_KEY,
                             "&ivm_id=" + username,
                             "&ivm_pw=" + password,
                             "&ivm_name=" + name,
@@ -82,13 +85,22 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                         return [4 /*yield*/, axios_1.default.get(url)];
                     case 2:
                         response = _b.sent();
-                        isSuccessful = response.data.impactvision.result_code == "SUCCESS" ? true : false;
+                        resultCode = response.data.impactvision.result_code;
+                        if (resultCode == "FAIL") {
+                            return [2 /*return*/, {
+                                    resultCode: resultCode,
+                                    resultMessage: response.data.impactvision.result_message,
+                                    Data: {
+                                        User: null
+                                    }
+                                }];
+                        }
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                data: isSuccessful
-                                    ? new impactVisionUser_1.ImpactVisionUser(response.data.impactvision.member_info)
-                                    : null
+                                Data: {
+                                    User: new impactVisionUser_1.ImpactVisionUser(response.data.impactvision.member_info)
+                                }
                             }];
                     case 3:
                         error_1 = _b.sent();
@@ -108,7 +120,7 @@ var ImpactVisionAuthentication = /** @class */ (function () {
      * @param nickname 닉네임
      * @param mobile 휴대폰 번호
      */
-    ImpactVisionAuthentication.prototype.update = function (branchID, username, password, name, nickname, mobile) {
+    ImpactVisionManager.prototype.update = function (branchID, username, password, name, nickname, mobile) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
             var shopID, url, response, error_2;
@@ -121,10 +133,10 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                             return [2 /*return*/, null];
                         }
                         url = [
-                            this.baseURL + "?st_type=Edit",
-                            "&shop_pid=" + this.shopPID,
+                            "" + this.BASE_URL + this.AUTH_ENDPOINT + "?st_type=Edit",
+                            "&shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
-                            "&shop_key=" + this.shopKey,
+                            "&shop_key=" + this.SHOP_KEY,
                             "&ivm_id=" + username,
                             "&ivm_pw=" + password,
                             "&ivm_pw_edit=" + password
@@ -143,7 +155,8 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                         response = _b.sent();
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
-                                resultMessage: response.data.impactvision.result_message
+                                resultMessage: response.data.impactvision.result_message,
+                                Data: null
                             }];
                     case 2:
                         error_2 = _b.sent();
@@ -160,7 +173,7 @@ var ImpactVisionAuthentication = /** @class */ (function () {
      * @param username 아이디
      * @param password 비밀번호
      */
-    ImpactVisionAuthentication.prototype.deleteUser = function (branchID, username, password) {
+    ImpactVisionManager.prototype.deleteUser = function (branchID, username, password) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
             var shopID, url, response, error_3;
@@ -173,10 +186,10 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                             return [2 /*return*/, null];
                         }
                         url = [
-                            this.baseURL + "?st_type=Delete",
-                            "&shop_pid=" + this.shopPID,
+                            "" + this.BASE_URL + this.AUTH_ENDPOINT + "?st_type=Delete",
+                            "&shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
-                            "&shop_key=" + this.shopKey,
+                            "&shop_key=" + this.SHOP_KEY,
                             "&ivm_id=" + username,
                             "&ivm_pw=" + password,
                             "&ivm_pw_edit=" + password
@@ -186,7 +199,8 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                         response = _b.sent();
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
-                                resultMessage: response.data.impactvision.result_message
+                                resultMessage: response.data.impactvision.result_message,
+                                Data: null
                             }];
                     case 2:
                         error_3 = _b.sent();
@@ -202,7 +216,7 @@ var ImpactVisionAuthentication = /** @class */ (function () {
      * @param branchID 지점 번호
      * @param username 중복 검색할 아이디
      */
-    ImpactVisionAuthentication.prototype.checkUsername = function (branchID, username) {
+    ImpactVisionManager.prototype.checkUsername = function (branchID, username) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
             var shopID, url, response, isAvailable, error_4;
@@ -215,10 +229,10 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                             return [2 /*return*/, null];
                         }
                         url = [
-                            this.baseURL + "?st_type=Idcheck",
-                            "&shop_pid=" + this.shopPID,
+                            "" + this.BASE_URL + this.AUTH_ENDPOINT + "?st_type=Idcheck",
+                            "&shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
-                            "&shop_key=" + this.shopKey,
+                            "&shop_key=" + this.SHOP_KEY,
                             "&ivm_id=" + username
                         ];
                         return [4 /*yield*/, axios_1.default.get(url.join(""))];
@@ -246,10 +260,10 @@ var ImpactVisionAuthentication = /** @class */ (function () {
      * @param pageIndex 검색할 리스트의 index
      * @param branchID 지점 번호
      */
-    ImpactVisionAuthentication.prototype.getUserList = function (pageIndex, branchID) {
+    ImpactVisionManager.prototype.getUserList = function (pageIndex, branchID) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var shopID, url, response, usersObjArray, users, error_5;
+            var shopID, url, response, resultCode, usersObjArray, users, error_5;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -257,16 +271,26 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                         _b.trys.push([0, 3, , 4]);
                         shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
                         url = [
-                            this.baseURL + "?st_type=List",
+                            "" + this.BASE_URL + this.AUTH_ENDPOINT + "?st_type=List",
                             "&page_idx=" + pageIndex,
                             "&page_line=100",
-                            "&shop_pid=" + this.shopPID,
+                            "&shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
-                            "&shop_key=" + this.shopKey
+                            "&shop_key=" + this.SHOP_KEY
                         ].join("");
                         return [4 /*yield*/, axios_1.default.get(url)];
                     case 1:
                         response = _b.sent();
+                        resultCode = response.data.impactvision.result_code;
+                        if (resultCode == "FAIL") {
+                            return [2 /*return*/, {
+                                    resultCode: resultCode,
+                                    resultMessage: response.data.impactvision.result_message,
+                                    Data: {
+                                        Users: null
+                                    }
+                                }];
+                        }
                         usersObjArray = response.data.impactvision.member_info;
                         return [4 /*yield*/, usersObjArray.map(function (userObj) { return __awaiter(_this, void 0, void 0, function () {
                                 return __generator(this, function (_a) {
@@ -281,7 +305,7 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                data: {
+                                Data: {
                                     Users: users
                                 }
                             }];
@@ -294,7 +318,124 @@ var ImpactVisionAuthentication = /** @class */ (function () {
             });
         });
     };
-    ImpactVisionAuthentication.prototype.getBranchInfo = function (branchID) {
+    ImpactVisionManager.prototype.getPlateList = function (branchID) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var shopID, url, response, resultCode, plateArray, plates, error_6;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
+                        url = [
+                            "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=List",
+                            "&shop_pid=" + this.SHOP_PID,
+                            "&shop_id=" + shopID + "d",
+                            "&shop_key=" + this.SHOP_KEY
+                        ].join("");
+                        return [4 /*yield*/, axios_1.default.get(url)];
+                    case 1:
+                        response = _b.sent();
+                        resultCode = response.data.impactvision.result_code;
+                        if (resultCode == "FAIL") {
+                            return [2 /*return*/, {
+                                    resultCode: resultCode,
+                                    resultMessage: response.data.impactvision.result_message,
+                                    Data: {
+                                        Plates: null
+                                    }
+                                }];
+                        }
+                        plateArray = response.data.impactvision.client_info;
+                        plates = plateArray.map(function (plateObj) {
+                            return new impactVisionPlate_1.ImpactVisionPlate(plateObj);
+                        });
+                        return [2 /*return*/, {
+                                resultCode: response.data.impactvision.result_code,
+                                resultMessage: response.data.impactvision.result_message,
+                                Data: {
+                                    Plates: plates
+                                }
+                            }];
+                    case 2:
+                        error_6 = _b.sent();
+                        logger_1.Logger.showError(String(error_6));
+                        return [2 /*return*/, error_6];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ImpactVisionManager.prototype.openPlate = function (branchID, lockKey, duration) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var shopID, url, response, error_7;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
+                        url = [
+                            "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=Ctrl",
+                            "&shop_pid=" + this.SHOP_PID,
+                            "&shop_id=" + shopID,
+                            "&shop_key=" + this.SHOP_KEY,
+                            "client_lock_key=" + lockKey,
+                            "client_lock_mode=unlock",
+                            "client_lock_time=" + duration
+                        ].join("");
+                        return [4 /*yield*/, axios_1.default.get(url)];
+                    case 1:
+                        response = _b.sent();
+                        return [2 /*return*/, {
+                                resultCode: response.data.impactvision.result_code,
+                                resultMessage: response.data.impactvision.result_message,
+                                Data: null
+                            }];
+                    case 2:
+                        error_7 = _b.sent();
+                        logger_1.Logger.showError(String(error_7));
+                        return [2 /*return*/, error_7];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ImpactVisionManager.prototype.shutPlate = function (branchID, lockKey) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var shopID, url, response, error_8;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
+                        url = [
+                            "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=Ctrl",
+                            "&shop_pid=" + this.SHOP_PID,
+                            "&shop_id=" + shopID,
+                            "&shop_key=" + this.SHOP_KEY,
+                            "client_lock_key=" + lockKey,
+                            "client_lock_mode=lock"
+                        ].join("");
+                        return [4 /*yield*/, axios_1.default.get(url)];
+                    case 1:
+                        response = _b.sent();
+                        return [2 /*return*/, {
+                                resultCode: response.data.impactvision.result_code,
+                                resultMessage: response.data.impactvision.result_message,
+                                Data: null
+                            }];
+                    case 2:
+                        error_8 = _b.sent();
+                        logger_1.Logger.showError(String(error_8));
+                        return [2 /*return*/, error_8];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    ImpactVisionManager.prototype.getBranchInfo = function (branchID) {
         switch (branchID) {
             case 0:
                 return {
@@ -315,7 +456,7 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                 return null;
         }
     };
-    ImpactVisionAuthentication.getBranchID = function (branchID) {
+    ImpactVisionManager.getBranchID = function (branchID) {
         switch (branchID) {
             case "ivm060117": //삼성
                 return 0;
@@ -337,13 +478,13 @@ var ImpactVisionAuthentication = /** @class */ (function () {
                 return 999;
         }
     };
-    ImpactVisionAuthentication.prototype.createPassword = function (id, name, mobile) {
+    ImpactVisionManager.prototype.createPassword = function (id, name, mobile) {
         return __awaiter(this, void 0, void 0, function () {
             return __generator(this, function (_a) {
                 return [2 /*return*/, id + "_" + name + "_" + mobile];
             });
         });
     };
-    return ImpactVisionAuthentication;
+    return ImpactVisionManager;
 }());
-exports.ImpactVisionAuthentication = ImpactVisionAuthentication;
+exports.ImpactVisionManager = ImpactVisionManager;

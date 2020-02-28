@@ -39,7 +39,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var exampleUser_1 = require("./examples/exampleUser");
 var logger_1 = require("./universal/logger");
 var membershipManager_1 = require("./membership/membershipManager");
-var impactVisionAuthentication_1 = require("./ImpactVision/impactVisionAuthentication");
+var impactVisionManager_1 = require("./ImpactVision/impactVisionManager");
 var accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTc5MDA4MzgwLCJleHAiOjE1ODI2MDgzODAsImlzcyI6IkFydGlsZWFybiJ9.kkYmp6yN8HiveOjBA5ZbPst0z7Bu-KX-X-q8t1govwM";
 var clientSecretKey = "7918c66fd8d7792a73ce0730dde6823ed07b1f7d259bf3c26f5c8d3517b1d3a5a00715d71abf187208e4aa334e447752";
 function renew() {
@@ -57,13 +57,13 @@ function renew() {
         });
     });
 }
-var imvAuth = new impactVisionAuthentication_1.ImpactVisionAuthentication();
+var ivManager = new impactVisionManager_1.ImpactVisionManager();
 function signUpForIV() {
     return __awaiter(this, void 0, void 0, function () {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, imvAuth.signUp(0, "test09", "justinji", "01067991866", "justin")];
+                case 0: return [4 /*yield*/, ivManager.signUp(0, "test09", "justinji", "01067991866", "justin")];
                 case 1:
                     result = _a.sent();
                     console.log(result);
@@ -77,10 +77,24 @@ function userList() {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, imvAuth.getUserList(0, 0)];
+                case 0: return [4 /*yield*/, ivManager.getUserList(0, 0)];
                 case 1:
                     result = _a.sent();
                     console.log(result.data.users);
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+function plateList() {
+    return __awaiter(this, void 0, void 0, function () {
+        var result;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, ivManager.getPlateList(0)];
+                case 1:
+                    result = _a.sent();
+                    console.log(result.Data.Plates);
                     return [2 /*return*/];
             }
         });
@@ -91,7 +105,7 @@ function userUpdate() {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, imvAuth.update(0, "test08", "aaaa1111", "new name", "new nicname", "01022222222")];
+                case 0: return [4 /*yield*/, ivManager.update(0, "test08", "aaaa1111", "new name", "new nicname", "01022222222")];
                 case 1:
                     result = _a.sent();
                     console.log(result);
@@ -105,7 +119,7 @@ function userDelete() {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, imvAuth.deleteUser(0, "test09", "aaaa1111")];
+                case 0: return [4 /*yield*/, ivManager.deleteUser(0, "test09", "aaaa1111")];
                 case 1:
                     result = _a.sent();
                     console.log(result);
@@ -119,7 +133,7 @@ function checkImpactVisionUsername() {
         var result;
         return __generator(this, function (_a) {
             switch (_a.label) {
-                case 0: return [4 /*yield*/, imvAuth.checkUsername(0, "test09")];
+                case 0: return [4 /*yield*/, ivManager.checkUsername(0, "test09")];
                 case 1:
                     result = _a.sent();
                     console.log(result);
