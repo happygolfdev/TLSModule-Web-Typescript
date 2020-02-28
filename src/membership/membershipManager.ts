@@ -34,7 +34,6 @@ class MembershipManager {
       };
     }
   }
-
   /**
    * Membership 데이터 베이스에 새로운 가입자를 추가한다
    * @param accessToken 클라이언트 서버 access token
