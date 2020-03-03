@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var ImpactVisionPlate = /** @class */ (function () {
-    function ImpactVisionPlate(object) {
+    function ImpactVisionPlate(id, object) {
+        this.id = id;
         this.shopID = object.client_shop_id;
         this.lockKey = object.client_lock_key;
         this.name = object.client_nick;

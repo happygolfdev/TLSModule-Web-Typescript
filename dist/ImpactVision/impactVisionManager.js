@@ -43,6 +43,7 @@ var axios_1 = __importDefault(require("axios"));
 var logger_1 = require("../universal/logger");
 var impactVisionUser_1 = require("./impactVisionUser");
 var impactVisionPlate_1 = require("./impactVisionPlate");
+var universal_1 = require("../universal/universal");
 var ImpactVisionManager = /** @class */ (function () {
     function ImpactVisionManager() {
         this.BASE_URL = "http://my.impactvision.co.kr/webapi";
@@ -318,19 +319,25 @@ var ImpactVisionManager = /** @class */ (function () {
             });
         });
     };
+    /**
+     * 해당 지점의 모든 타석의 데이터를 받아온다.
+     * @param branchID 지점 번호
+     */
     ImpactVisionManager.prototype.getPlateList = function (branchID) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
             var shopID, url, response, resultCode, plateArray, plates, error_6;
+            var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
-                        _b.trys.push([0, 2, , 3]);
+                        _b.trys.push([0, 3, , 4]);
                         shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
+                        console.log(shopID);
                         url = [
                             "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=List",
                             "&shop_pid=" + this.SHOP_PID,
-                            "&shop_id=" + shopID + "d",
+                            "&shop_id=" + shopID,
                             "&shop_key=" + this.SHOP_KEY
                         ].join("");
                         return [4 /*yield*/, axios_1.default.get(url)];
@@ -347,9 +354,18 @@ var ImpactVisionManager = /** @class */ (function () {
                                 }];
                         }
                         plateArray = response.data.impactvision.client_info;
-                        plates = plateArray.map(function (plateObj) {
-                            return new impactVisionPlate_1.ImpactVisionPlate(plateObj);
-                        });
+                        plates = [];
+                        return [4 /*yield*/, universal_1.repeat(plateArray, function (plateObjc, idx) { return __awaiter(_this, void 0, void 0, function () {
+                                var plate;
+                                return __generator(this, function (_a) {
+                                    console.log(idx + " " + plateObjc);
+                                    plate = new impactVisionPlate_1.ImpactVisionPlate(idx, plateObjc);
+                                    plates.push(plate);
+                                    return [2 /*return*/];
+                                });
+                            }); })];
+                    case 2:
+                        _b.sent();
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
@@ -357,15 +373,21 @@ var ImpactVisionManager = /** @class */ (function () {
                                     Plates: plates
                                 }
                             }];
-                    case 2:
+                    case 3:
                         error_6 = _b.sent();
                         logger_1.Logger.showError(String(error_6));
                         return [2 /*return*/, error_6];
-                    case 3: return [2 /*return*/];
+                    case 4: return [2 /*return*/];
                 }
             });
         });
     };
+    /**
+     *
+     * @param branchID 지점 번호
+     * @param lockKey 제어할 타석의 lockKey
+     * @param duration 타석을 사용할 시간(분, 최대 1440분)
+     */
     ImpactVisionManager.prototype.openPlate = function (branchID, lockKey, duration) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
@@ -401,6 +423,11 @@ var ImpactVisionManager = /** @class */ (function () {
             });
         });
     };
+    /**
+     * 강제로 타석을 종료한다.
+     * @param branchID 지점 번호
+     * @param lockKey 타석의 lockKey
+     */
     ImpactVisionManager.prototype.shutPlate = function (branchID, lockKey) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {

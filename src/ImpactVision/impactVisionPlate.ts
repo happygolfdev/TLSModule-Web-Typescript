@@ -1,10 +1,12 @@
 class ImpactVisionPlate {
+  id: Number;
   shopID: String;
   lockKey: String;
   name: String;
   registeredAt: Date;
 
-  constructor(object: any) {
+  constructor(id: Number, object: any) {
+    this.id = id;
     this.shopID = object.client_shop_id;
     this.lockKey = object.client_lock_key;
     this.name = object.client_nick;

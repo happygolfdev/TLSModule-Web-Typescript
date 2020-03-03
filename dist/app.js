@@ -94,7 +94,7 @@ function plateList() {
                 case 0: return [4 /*yield*/, ivManager.getPlateList(0)];
                 case 1:
                     result = _a.sent();
-                    console.log(result.Data.Plates);
+                    console.log(result);
                     return [2 /*return*/];
             }
         });

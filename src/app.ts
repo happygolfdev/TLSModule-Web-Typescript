@@ -38,7 +38,7 @@ async function userList() {
 
 async function plateList() {
   const result = await ivManager.getPlateList(0);
-  console.log(result.Data.Plates);
+  console.log(result);
 }
 
 async function userUpdate() {

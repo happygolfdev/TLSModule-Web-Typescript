@@ -2,6 +2,7 @@ import Axios from "axios";
 import { Logger } from "../universal/logger";
 import { ImpactVisionUser } from "./impactVisionUser";
 import { ImpactVisionPlate } from "./impactVisionPlate";
+import { repeat } from "../universal/universal";
 
 class ImpactVisionManager {
   BASE_URL = "http://my.impactvision.co.kr/webapi";
@@ -248,13 +249,18 @@ class ImpactVisionManager {
     }
   }
 
+  /**
+   * 해당 지점의 모든 타석의 데이터를 받아온다.
+   * @param branchID 지점 번호
+   */
   public async getPlateList(branchID: Number) {
     try {
       const shopID = this.getBranchInfo(branchID)?.id;
+      console.log(shopID);
       const url = [
         `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=List`,
         `&shop_pid=${this.SHOP_PID}`,
-        `&shop_id=${shopID}d`,
+        `&shop_id=${shopID}`,
         `&shop_key=${this.SHOP_KEY}`
       ].join("");
 
@@ -271,8 +277,11 @@ class ImpactVisionManager {
       }
 
       const plateArray = response.data.impactvision.client_info;
-      const plates: ImpactVisionPlate[] = plateArray.map((plateObj: any) => {
-        return new ImpactVisionPlate(plateObj);
+      var plates: ImpactVisionPlate[] = [];
+      await repeat(plateArray, async (plateObjc, idx) => {
+        console.log(`${idx} ${plateObjc}`);
+        const plate = new ImpactVisionPlate(idx, plateObjc);
+        plates.push(plate);
       });
 
       return {
@@ -288,6 +297,12 @@ class ImpactVisionManager {
     }
   }
 
+  /**
+   *
+   * @param branchID 지점 번호
+   * @param lockKey 제어할 타석의 lockKey
+   * @param duration 타석을 사용할 시간(분, 최대 1440분)
+   */
   public async openPlate(branchID: Number, lockKey: String, duration: Number) {
     try {
       const shopID = this.getBranchInfo(branchID)?.id;
@@ -313,6 +328,11 @@ class ImpactVisionManager {
     }
   }
 
+  /**
+   * 강제로 타석을 종료한다.
+   * @param branchID 지점 번호
+   * @param lockKey 타석의 lockKey
+   */
   public async shutPlate(branchID: Number, lockKey: String) {
     try {
       const shopID = this.getBranchInfo(branchID)?.id;
