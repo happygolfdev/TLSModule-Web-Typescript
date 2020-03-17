@@ -53,7 +53,7 @@ var ImpactVisionManager = /** @class */ (function () {
         this.SHOP_KEY = "MjdsMUxkME02Nk1GM2RiU2J2eVJqd2tuK2xKZE0rT3NBdkVSbU1SSXppcz0";
     }
     /**
-     *
+     * 입력한 훈련소(branch)에 회원의 가입
      * @param branchID 훈련소 지점 번호
      * @param username 아이디
      * @param name 이름
@@ -106,7 +106,13 @@ var ImpactVisionManager = /** @class */ (function () {
                     case 3:
                         error_1 = _b.sent();
                         logger_1.Logger.showError(String(error_1));
-                        return [2 /*return*/, error_1];
+                        return [2 /*return*/, {
+                                resultCode: error_1.response.data.impactvision.result_code,
+                                resultMessage: error_1.response.data.impactvision.result_message,
+                                Data: {
+                                    User: null
+                                }
+                            }];
                     case 4: return [2 /*return*/];
                 }
             });
@@ -320,13 +326,82 @@ var ImpactVisionManager = /** @class */ (function () {
         });
     };
     /**
+     * 지점의 존재여부와 존재한다면 타석 리스트를 받아온다.
+     * @param shopID 지점 아이디
+     */
+    ImpactVisionManager.prototype.checkBranch = function (shopID) {
+        return __awaiter(this, void 0, void 0, function () {
+            var url, response, resultCode, plateArray, plates, branchID, error_6;
+            var _this = this;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        _a.trys.push([0, 3, , 4]);
+                        url = [
+                            "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=List",
+                            "&shop_pid=" + this.SHOP_PID,
+                            "&shop_id=" + shopID,
+                            "&shop_key=" + this.SHOP_KEY
+                        ].join("");
+                        return [4 /*yield*/, axios_1.default.get(url)];
+                    case 1:
+                        response = _a.sent();
+                        resultCode = response.data.impactvision.result_code;
+                        if (resultCode == "FAIL") {
+                            return [2 /*return*/, {
+                                    resultCode: resultCode,
+                                    resultMessage: response.data.impactvision.result_message,
+                                    Data: {
+                                        Plates: null
+                                    }
+                                }];
+                        }
+                        plateArray = response.data.impactvision.client_info;
+                        plates = [];
+                        return [4 /*yield*/, universal_1.repeat(plateArray, function (plateObjc, idx) { return __awaiter(_this, void 0, void 0, function () {
+                                var plate;
+                                return __generator(this, function (_a) {
+                                    console.log(idx + " " + plateObjc);
+                                    plate = new impactVisionPlate_1.ImpactVisionPlate(idx, plateObjc);
+                                    plates.push(plate);
+                                    return [2 /*return*/];
+                                });
+                            }); })];
+                    case 2:
+                        _a.sent();
+                        branchID = ImpactVisionManager.getBranchID(shopID);
+                        return [2 /*return*/, {
+                                resultCode: response.data.impactvision.result_code,
+                                resultMessage: response.data.impactvision.result_message,
+                                Data: {
+                                    branchID: branchID,
+                                    Plates: plates
+                                }
+                            }];
+                    case 3:
+                        error_6 = _a.sent();
+                        logger_1.Logger.showError(String(error_6));
+                        return [2 /*return*/, {
+                                resultCode: error_6.response.data.impactvision.result_code,
+                                resultMessage: error_6.response.data.impactvision.result_message,
+                                Data: {
+                                    branchID: null,
+                                    Plates: null
+                                }
+                            }];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
      * 해당 지점의 모든 타석의 데이터를 받아온다.
      * @param branchID 지점 번호
      */
     ImpactVisionManager.prototype.getPlateList = function (branchID) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var shopID, url, response, resultCode, plateArray, plates, error_6;
+            var shopID, url, response, resultCode, plateArray, plates, error_7;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -374,16 +449,22 @@ var ImpactVisionManager = /** @class */ (function () {
                                 }
                             }];
                     case 3:
-                        error_6 = _b.sent();
-                        logger_1.Logger.showError(String(error_6));
-                        return [2 /*return*/, error_6];
+                        error_7 = _b.sent();
+                        logger_1.Logger.showError(String(error_7));
+                        return [2 /*return*/, {
+                                resultCode: error_7.response.data.impactvision.result_code,
+                                resultMessage: error_7.response.data.impactvision.result_message,
+                                Data: {
+                                    Plates: null
+                                }
+                            }];
                     case 4: return [2 /*return*/];
                 }
             });
         });
     };
     /**
-     *
+     * 타석을 수동으로 시작한다.
      * @param branchID 지점 번호
      * @param lockKey 제어할 타석의 lockKey
      * @param duration 타석을 사용할 시간(분, 최대 1440분)
@@ -391,7 +472,7 @@ var ImpactVisionManager = /** @class */ (function () {
     ImpactVisionManager.prototype.openPlate = function (branchID, lockKey, duration) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var shopID, url, response, error_7;
+            var shopID, url, response, error_8;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -415,9 +496,13 @@ var ImpactVisionManager = /** @class */ (function () {
                                 Data: null
                             }];
                     case 2:
-                        error_7 = _b.sent();
-                        logger_1.Logger.showError(String(error_7));
-                        return [2 /*return*/, error_7];
+                        error_8 = _b.sent();
+                        logger_1.Logger.showError(String(error_8));
+                        return [2 /*return*/, {
+                                resultCode: error_8.response.data.impactvision.result_code,
+                                resultMessage: error_8.response.data.impactvision.result_message,
+                                Data: null
+                            }];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -431,7 +516,7 @@ var ImpactVisionManager = /** @class */ (function () {
     ImpactVisionManager.prototype.shutPlate = function (branchID, lockKey) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var shopID, url, response, error_8;
+            var shopID, url, response, error_9;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -454,9 +539,13 @@ var ImpactVisionManager = /** @class */ (function () {
                                 Data: null
                             }];
                     case 2:
-                        error_8 = _b.sent();
-                        logger_1.Logger.showError(String(error_8));
-                        return [2 /*return*/, error_8];
+                        error_9 = _b.sent();
+                        logger_1.Logger.showError(String(error_9));
+                        return [2 /*return*/, {
+                                resultCode: error_9.response.data.impactvision.result_code,
+                                resultMessage: error_9.response.data.impactvision.result_message,
+                                Data: null
+                            }];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -483,8 +572,8 @@ var ImpactVisionManager = /** @class */ (function () {
                 return null;
         }
     };
-    ImpactVisionManager.getBranchID = function (branchID) {
-        switch (branchID) {
+    ImpactVisionManager.getBranchID = function (shopID) {
+        switch (shopID) {
             case "ivm060117": //삼성
                 return 0;
             case "ivm130147": //위례
