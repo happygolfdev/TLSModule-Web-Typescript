@@ -91,16 +91,16 @@ var ImpactVisionManager = /** @class */ (function () {
                             return [2 /*return*/, {
                                     resultCode: resultCode,
                                     resultMessage: response.data.impactvision.result_message,
-                                    Data: {
-                                        User: null
+                                    data: {
+                                        user: null
                                     }
                                 }];
                         }
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                Data: {
-                                    User: new impactVisionUser_1.ImpactVisionUser(response.data.impactvision.member_info)
+                                data: {
+                                    user: new impactVisionUser_1.ImpactVisionUser(response.data.impactvision.member_info)
                                 }
                             }];
                     case 3:
@@ -109,8 +109,8 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: error_1.response.data.impactvision.result_code,
                                 resultMessage: error_1.response.data.impactvision.result_message,
-                                Data: {
-                                    User: null
+                                data: {
+                                    user: null
                                 }
                             }];
                     case 4: return [2 /*return*/];
@@ -163,12 +163,16 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                Data: null
+                                data: null
                             }];
                     case 2:
                         error_2 = _b.sent();
                         logger_1.Logger.showError(String(error_2));
-                        return [2 /*return*/, error_2];
+                        return [2 /*return*/, {
+                                resultCode: error_2.response.data.impactvision.result_code,
+                                resultMessage: error_2.response.data.impactvision.result_message,
+                                data: null
+                            }];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -207,12 +211,16 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                Data: null
+                                data: null
                             }];
                     case 2:
                         error_3 = _b.sent();
                         logger_1.Logger.showError(String(error_3));
-                        return [2 /*return*/, error_3];
+                        return [2 /*return*/, {
+                                resultCode: error_3.response.data.impactvision.result_code,
+                                resultMessage: error_3.response.data.impactvision.result_message,
+                                data: null
+                            }];
                     case 3: return [2 /*return*/];
                 }
             });
@@ -247,15 +255,21 @@ var ImpactVisionManager = /** @class */ (function () {
                         response = _b.sent();
                         isAvailable = response.data.impactvision.result_code == "SUCCESS" ? false : true;
                         return [2 /*return*/, {
-                                error: null,
-                                isAvailable: isAvailable
+                                resultCode: response.data.impactvision.result_code,
+                                resultMessage: response.data.impactvision.result_message,
+                                data: {
+                                    isAvailable: isAvailable
+                                }
                             }];
                     case 2:
                         error_4 = _b.sent();
                         logger_1.Logger.showError(String(error_4));
                         return [2 /*return*/, {
-                                error: error_4,
-                                isAvailable: false
+                                resultCode: error_4.response.data.impactvision.result_code,
+                                resultMessage: error_4.response.data.impactvision.result_message,
+                                data: {
+                                    isAvailable: null
+                                }
                             }];
                     case 3: return [2 /*return*/];
                 }
@@ -293,8 +307,8 @@ var ImpactVisionManager = /** @class */ (function () {
                             return [2 /*return*/, {
                                     resultCode: resultCode,
                                     resultMessage: response.data.impactvision.result_message,
-                                    Data: {
-                                        Users: null
+                                    data: {
+                                        users: null
                                     }
                                 }];
                         }
@@ -312,14 +326,20 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                Data: {
-                                    Users: users
+                                data: {
+                                    users: users
                                 }
                             }];
                     case 3:
                         error_5 = _b.sent();
                         logger_1.Logger.showError(String(error_5));
-                        return [2 /*return*/, error_5];
+                        return [2 /*return*/, {
+                                resultCode: error_5.response.data.impactvision.result_code,
+                                resultMessage: error_5.response.data.impactvision.result_message,
+                                data: {
+                                    users: null
+                                }
+                            }];
                     case 4: return [2 /*return*/];
                 }
             });
@@ -351,8 +371,8 @@ var ImpactVisionManager = /** @class */ (function () {
                             return [2 /*return*/, {
                                     resultCode: resultCode,
                                     resultMessage: response.data.impactvision.result_message,
-                                    Data: {
-                                        Plates: null
+                                    data: {
+                                        plates: null
                                     }
                                 }];
                         }
@@ -373,9 +393,9 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                Data: {
+                                data: {
                                     branchID: branchID,
-                                    Plates: plates
+                                    plates: plates
                                 }
                             }];
                     case 3:
@@ -384,9 +404,9 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: error_6.response.data.impactvision.result_code,
                                 resultMessage: error_6.response.data.impactvision.result_message,
-                                Data: {
+                                data: {
                                     branchID: null,
-                                    Plates: null
+                                    plates: null
                                 }
                             }];
                     case 4: return [2 /*return*/];
@@ -423,8 +443,8 @@ var ImpactVisionManager = /** @class */ (function () {
                             return [2 /*return*/, {
                                     resultCode: resultCode,
                                     resultMessage: response.data.impactvision.result_message,
-                                    Data: {
-                                        Plates: null
+                                    data: {
+                                        plates: null
                                     }
                                 }];
                         }
@@ -444,8 +464,8 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                Data: {
-                                    Plates: plates
+                                data: {
+                                    plates: plates
                                 }
                             }];
                     case 3:
@@ -454,8 +474,8 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: error_7.response.data.impactvision.result_code,
                                 resultMessage: error_7.response.data.impactvision.result_message,
-                                Data: {
-                                    Plates: null
+                                data: {
+                                    plates: null
                                 }
                             }];
                     case 4: return [2 /*return*/];
@@ -493,7 +513,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                Data: null
+                                data: null
                             }];
                     case 2:
                         error_8 = _b.sent();
@@ -501,7 +521,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: error_8.response.data.impactvision.result_code,
                                 resultMessage: error_8.response.data.impactvision.result_message,
-                                Data: null
+                                data: null
                             }];
                     case 3: return [2 /*return*/];
                 }
@@ -536,7 +556,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                Data: null
+                                data: null
                             }];
                     case 2:
                         error_9 = _b.sent();
@@ -544,7 +564,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: error_9.response.data.impactvision.result_code,
                                 resultMessage: error_9.response.data.impactvision.result_message,
-                                Data: null
+                                data: null
                             }];
                     case 3: return [2 /*return*/];
                 }

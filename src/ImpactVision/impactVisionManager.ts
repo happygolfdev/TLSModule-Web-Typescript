@@ -49,8 +49,8 @@ class ImpactVisionManager {
         return {
           resultCode: resultCode,
           resultMessage: response.data.impactvision.result_message,
-          Data: {
-            User: null
+          data: {
+            user: null
           }
         };
       }
@@ -58,8 +58,8 @@ class ImpactVisionManager {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        Data: {
-          User: new ImpactVisionUser(response.data.impactvision.member_info)
+        data: {
+          user: new ImpactVisionUser(response.data.impactvision.member_info)
         }
       };
     } catch (error) {
@@ -67,8 +67,8 @@ class ImpactVisionManager {
       return {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
-        Data: {
-          User: null
+        data: {
+          user: null
         }
       };
     }
@@ -123,11 +123,15 @@ class ImpactVisionManager {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        Data: null
+        data: null
       };
     } catch (error) {
       Logger.showError(String(error));
-      return error;
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        data: null
+      };
     }
   }
 
@@ -161,11 +165,15 @@ class ImpactVisionManager {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        Data: null
+        data: null
       };
     } catch (error) {
       Logger.showError(String(error));
-      return error;
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        data: null
+      };
     }
   }
 
@@ -194,14 +202,20 @@ class ImpactVisionManager {
         response.data.impactvision.result_code == "SUCCESS" ? false : true;
 
       return {
-        error: null,
-        isAvailable: isAvailable
+        resultCode: response.data.impactvision.result_code,
+        resultMessage: response.data.impactvision.result_message,
+        data: {
+          isAvailable: isAvailable
+        }
       };
     } catch (error) {
       Logger.showError(String(error));
       return {
-        error: error,
-        isAvailable: false
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        data: {
+          isAvailable: null
+        }
       };
     }
   }
@@ -229,8 +243,8 @@ class ImpactVisionManager {
         return {
           resultCode: resultCode,
           resultMessage: response.data.impactvision.result_message,
-          Data: {
-            Users: null
+          data: {
+            users: null
           }
         };
       }
@@ -245,13 +259,19 @@ class ImpactVisionManager {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        Data: {
-          Users: users
+        data: {
+          users: users
         }
       };
     } catch (error) {
       Logger.showError(String(error));
-      return error;
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        data: {
+          users: null
+        }
+      };
     }
   }
 
@@ -274,8 +294,8 @@ class ImpactVisionManager {
         return {
           resultCode: resultCode,
           resultMessage: response.data.impactvision.result_message,
-          Data: {
-            Plates: null
+          data: {
+            plates: null
           }
         };
       }
@@ -292,9 +312,9 @@ class ImpactVisionManager {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        Data: {
+        data: {
           branchID: branchID,
-          Plates: plates
+          plates: plates
         }
       };
     } catch (error) {
@@ -302,9 +322,9 @@ class ImpactVisionManager {
       return {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
-        Data: {
+        data: {
           branchID: null,
-          Plates: null
+          plates: null
         }
       };
     }
@@ -331,8 +351,8 @@ class ImpactVisionManager {
         return {
           resultCode: resultCode,
           resultMessage: response.data.impactvision.result_message,
-          Data: {
-            Plates: null
+          data: {
+            plates: null
           }
         };
       }
@@ -348,8 +368,8 @@ class ImpactVisionManager {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        Data: {
-          Plates: plates
+        data: {
+          plates: plates
         }
       };
     } catch (error) {
@@ -357,8 +377,8 @@ class ImpactVisionManager {
       return {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
-        Data: {
-          Plates: null
+        data: {
+          plates: null
         }
       };
     }
@@ -387,14 +407,14 @@ class ImpactVisionManager {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        Data: null
+        data: null
       };
     } catch (error) {
       Logger.showError(String(error));
       return {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
-        Data: null
+        data: null
       };
     }
   }
@@ -420,14 +440,14 @@ class ImpactVisionManager {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        Data: null
+        data: null
       };
     } catch (error) {
       Logger.showError(String(error));
       return {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
-        Data: null
+        data: null
       };
     }
   }
