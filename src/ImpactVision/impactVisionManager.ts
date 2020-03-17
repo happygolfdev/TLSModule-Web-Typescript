@@ -13,7 +13,7 @@ class ImpactVisionManager {
   SHOP_KEY = "MjdsMUxkME02Nk1GM2RiU2J2eVJqd2tuK2xKZE0rT3NBdkVSbU1SSXppcz0";
 
   /**
-   *
+   * 입력한 훈련소(branch)에 회원의 가입
    * @param branchID 훈련소 지점 번호
    * @param username 아이디
    * @param name 이름
@@ -64,7 +64,13 @@ class ImpactVisionManager {
       };
     } catch (error) {
       Logger.showError(String(error));
-      return error;
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        Data: {
+          User: null
+        }
+      };
     }
   }
 
@@ -250,6 +256,61 @@ class ImpactVisionManager {
   }
 
   /**
+   * 지점의 존재여부와 존재한다면 타석 리스트를 받아온다.
+   * @param shopID 지점 아이디
+   */
+  public async checkBranch(shopID: String) {
+    try {
+      const url = [
+        `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=List`,
+        `&shop_pid=${this.SHOP_PID}`,
+        `&shop_id=${shopID}`,
+        `&shop_key=${this.SHOP_KEY}`
+      ].join("");
+
+      const response = await Axios.get(url);
+      const resultCode = response.data.impactvision.result_code;
+      if (resultCode == "FAIL") {
+        return {
+          resultCode: resultCode,
+          resultMessage: response.data.impactvision.result_message,
+          Data: {
+            Plates: null
+          }
+        };
+      }
+
+      const plateArray = response.data.impactvision.client_info;
+      var plates: ImpactVisionPlate[] = [];
+      await repeat(plateArray, async (plateObjc, idx) => {
+        console.log(`${idx} ${plateObjc}`);
+        const plate = new ImpactVisionPlate(idx, plateObjc);
+        plates.push(plate);
+      });
+
+      const branchID = ImpactVisionManager.getBranchID(shopID);
+      return {
+        resultCode: response.data.impactvision.result_code,
+        resultMessage: response.data.impactvision.result_message,
+        Data: {
+          branchID: branchID,
+          Plates: plates
+        }
+      };
+    } catch (error) {
+      Logger.showError(String(error));
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        Data: {
+          branchID: null,
+          Plates: null
+        }
+      };
+    }
+  }
+
+  /**
    * 해당 지점의 모든 타석의 데이터를 받아온다.
    * @param branchID 지점 번호
    */
@@ -293,12 +354,18 @@ class ImpactVisionManager {
       };
     } catch (error) {
       Logger.showError(String(error));
-      return error;
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        Data: {
+          Plates: null
+        }
+      };
     }
   }
 
   /**
-   *
+   * 타석을 수동으로 시작한다.
    * @param branchID 지점 번호
    * @param lockKey 제어할 타석의 lockKey
    * @param duration 타석을 사용할 시간(분, 최대 1440분)
@@ -324,7 +391,11 @@ class ImpactVisionManager {
       };
     } catch (error) {
       Logger.showError(String(error));
-      return error;
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        Data: null
+      };
     }
   }
 
@@ -353,7 +424,11 @@ class ImpactVisionManager {
       };
     } catch (error) {
       Logger.showError(String(error));
-      return error;
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        Data: null
+      };
     }
   }
 
@@ -379,8 +454,8 @@ class ImpactVisionManager {
     }
   }
 
-  static getBranchID(branchID: String) {
-    switch (branchID) {
+  static getBranchID(shopID: String): Number {
+    switch (shopID) {
       case "ivm060117": //삼성
         return 0;
       case "ivm130147": //위례
