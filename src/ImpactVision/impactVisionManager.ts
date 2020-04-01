@@ -294,9 +294,7 @@ class ImpactVisionManager {
         return {
           resultCode: resultCode,
           resultMessage: response.data.impactvision.result_message,
-          data: {
-            plates: null
-          }
+          data: null
         };
       }
 
@@ -322,10 +320,7 @@ class ImpactVisionManager {
       return {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
-        data: {
-          branchID: null,
-          plates: null
-        }
+        data: null
       };
     }
   }

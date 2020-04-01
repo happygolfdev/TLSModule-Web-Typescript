@@ -371,9 +371,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             return [2 /*return*/, {
                                     resultCode: resultCode,
                                     resultMessage: response.data.impactvision.result_message,
-                                    data: {
-                                        plates: null
-                                    }
+                                    data: null
                                 }];
                         }
                         plateArray = response.data.impactvision.client_info;
@@ -404,10 +402,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: error_6.response.data.impactvision.result_code,
                                 resultMessage: error_6.response.data.impactvision.result_message,
-                                data: {
-                                    branchID: null,
-                                    plates: null
-                                }
+                                data: null
                             }];
                     case 4: return [2 /*return*/];
                 }

@@ -9,6 +9,7 @@ import { Logger } from "./logger";
  */
 async function response(
   response: any,
+  statusCode: Number,
   resultCode: Number,
   message: String,
   data: any
@@ -20,8 +21,9 @@ async function response(
       "Access-Control-Allow-Methods",
       "GET, HEAD, PUT PATCH, POST DELETE"
     );
-    return await response.status(resultCode).json({
-      code: resultCode,
+
+    return await response.status(statusCode).json({
+      resultCode: resultCode,
       message: message,
       Data: data
     });
@@ -33,7 +35,6 @@ async function response(
       "GET, HEAD, PUT PATCH, POST DELETE"
     );
 
-    Logger.showError(error.message);
     return await response.status(500).json({
       resultCode: 500,
       message: `server error: ${error.message}`
