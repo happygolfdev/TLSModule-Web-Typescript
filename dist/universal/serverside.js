@@ -43,7 +43,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param message 메세지
  * @param data 응답 데이터
  */
-function response(response, statusCode, resultCode, message, data) {
+function response(response, statusCode, message, data, resultCode) {
     return __awaiter(this, void 0, void 0, function () {
         var error_1;
         return __generator(this, function (_a) {
@@ -65,7 +65,6 @@ function response(response, statusCode, resultCode, message, data) {
                     response.header("Access-Control-Allow-Origin", "*");
                     response.header("Access-Control-Allow-Methods", "GET, HEAD, PUT PATCH, POST DELETE");
                     return [4 /*yield*/, response.status(500).json({
-                            resultCode: 500,
                             message: "server error: " + error_1.message
                         })];
                 case 3: return [2 /*return*/, _a.sent()];

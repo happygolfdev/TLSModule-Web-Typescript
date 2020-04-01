@@ -10,9 +10,9 @@ import { Logger } from "./logger";
 async function response(
   response: any,
   statusCode: Number,
-  resultCode: Number,
   message: String,
-  data: any
+  data: any,
+  resultCode?: Number | null
 ) {
   try {
     response.header("Access-Control-Allow-headers", "content-type");
@@ -36,7 +36,6 @@ async function response(
     );
 
     return await response.status(500).json({
-      resultCode: 500,
       message: `server error: ${error.message}`
     });
   }
