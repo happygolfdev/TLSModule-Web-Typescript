@@ -24,6 +24,7 @@ async function response(
 
     return await response.status(statusCode).json({
       resultCode: resultCode,
+      statusCode: statusCode,
       message: message,
       Data: data
     });
@@ -36,6 +37,7 @@ async function response(
     );
 
     return await response.status(500).json({
+      statusCode: statusCode,
       message: `server error: ${error.message}`
     });
   }
