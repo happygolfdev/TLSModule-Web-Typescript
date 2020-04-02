@@ -55,6 +55,7 @@ function response(response, statusCode, message, data, resultCode) {
                     response.header("Access-Control-Allow-Methods", "GET, HEAD, PUT PATCH, POST DELETE");
                     return [4 /*yield*/, response.status(statusCode).json({
                             resultCode: resultCode,
+                            statusCode: statusCode,
                             message: message,
                             Data: data
                         })];
@@ -65,6 +66,7 @@ function response(response, statusCode, message, data, resultCode) {
                     response.header("Access-Control-Allow-Origin", "*");
                     response.header("Access-Control-Allow-Methods", "GET, HEAD, PUT PATCH, POST DELETE");
                     return [4 /*yield*/, response.status(500).json({
+                            statusCode: statusCode,
                             message: "server error: " + error_1.message
                         })];
                 case 3: return [2 /*return*/, _a.sent()];
