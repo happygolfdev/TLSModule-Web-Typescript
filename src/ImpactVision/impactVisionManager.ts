@@ -40,7 +40,7 @@ class ImpactVisionManager {
         `&ivm_pw=${password}`,
         `&ivm_name=${name}`,
         `&ivm_nick=${nickname}`,
-        `&ivm_hp=${mobile}`
+        `&ivm_hp=${mobile}`,
       ].join("");
 
       const response = await Axios.get(url);
@@ -50,8 +50,8 @@ class ImpactVisionManager {
           resultCode: resultCode,
           resultMessage: response.data.impactvision.result_message,
           data: {
-            user: null
-          }
+            user: null,
+          },
         };
       }
 
@@ -59,8 +59,8 @@ class ImpactVisionManager {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
         data: {
-          user: new ImpactVisionUser(response.data.impactvision.member_info)
-        }
+          user: new ImpactVisionUser(response.data.impactvision.member_info),
+        },
       };
     } catch (error) {
       Logger.showError(String(error));
@@ -68,8 +68,8 @@ class ImpactVisionManager {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
         data: {
-          user: null
-        }
+          user: null,
+        },
       };
     }
   }
@@ -103,7 +103,7 @@ class ImpactVisionManager {
         `&shop_key=${this.SHOP_KEY}`,
         `&ivm_id=${username}`,
         `&ivm_pw=${password}`,
-        `&ivm_pw_edit=${password}`
+        `&ivm_pw_edit=${password}`,
       ];
 
       if (name != null) {
@@ -123,14 +123,14 @@ class ImpactVisionManager {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        data: null
+        data: null,
       };
     } catch (error) {
       Logger.showError(String(error));
       return {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
-        data: null
+        data: null,
       };
     }
   }
@@ -158,21 +158,21 @@ class ImpactVisionManager {
         `&shop_key=${this.SHOP_KEY}`,
         `&ivm_id=${username}`,
         `&ivm_pw=${password}`,
-        `&ivm_pw_edit=${password}`
+        `&ivm_pw_edit=${password}`,
       ];
 
       const response = await Axios.get(url.join(""));
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        data: null
+        data: null,
       };
     } catch (error) {
       Logger.showError(String(error));
       return {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
-        data: null
+        data: null,
       };
     }
   }
@@ -193,7 +193,7 @@ class ImpactVisionManager {
         `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
         `&shop_key=${this.SHOP_KEY}`,
-        `&ivm_id=${username}`
+        `&ivm_id=${username}`,
       ];
 
       const response = await Axios.get(url.join(""));
@@ -205,8 +205,8 @@ class ImpactVisionManager {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
         data: {
-          isAvailable: isAvailable
-        }
+          isAvailable: isAvailable,
+        },
       };
     } catch (error) {
       Logger.showError(String(error));
@@ -214,8 +214,8 @@ class ImpactVisionManager {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
         data: {
-          isAvailable: null
-        }
+          isAvailable: null,
+        },
       };
     }
   }
@@ -234,7 +234,7 @@ class ImpactVisionManager {
         `&page_line=100`,
         `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
-        `&shop_key=${this.SHOP_KEY}`
+        `&shop_key=${this.SHOP_KEY}`,
       ].join("");
 
       const response = await Axios.get(url);
@@ -244,8 +244,8 @@ class ImpactVisionManager {
           resultCode: resultCode,
           resultMessage: response.data.impactvision.result_message,
           data: {
-            users: null
-          }
+            users: null,
+          },
         };
       }
 
@@ -260,8 +260,8 @@ class ImpactVisionManager {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
         data: {
-          users: users
-        }
+          users: users,
+        },
       };
     } catch (error) {
       Logger.showError(String(error));
@@ -269,8 +269,8 @@ class ImpactVisionManager {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
         data: {
-          users: null
-        }
+          users: null,
+        },
       };
     }
   }
@@ -285,7 +285,7 @@ class ImpactVisionManager {
         `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=List`,
         `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
-        `&shop_key=${this.SHOP_KEY}`
+        `&shop_key=${this.SHOP_KEY}`,
       ].join("");
 
       const response = await Axios.get(url);
@@ -294,7 +294,7 @@ class ImpactVisionManager {
         return {
           resultCode: resultCode,
           resultMessage: response.data.impactvision.result_message,
-          data: null
+          data: null,
         };
       }
 
@@ -312,15 +312,15 @@ class ImpactVisionManager {
         resultMessage: response.data.impactvision.result_message,
         data: {
           branchID: branchID,
-          plates: plates
-        }
+          plates: plates,
+        },
       };
     } catch (error) {
       Logger.showError(String(error));
       return {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
-        data: null
+        data: null,
       };
     }
   }
@@ -337,7 +337,7 @@ class ImpactVisionManager {
         `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=List`,
         `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
-        `&shop_key=${this.SHOP_KEY}`
+        `&shop_key=${this.SHOP_KEY}`,
       ].join("");
 
       const response = await Axios.get(url);
@@ -347,8 +347,8 @@ class ImpactVisionManager {
           resultCode: resultCode,
           resultMessage: response.data.impactvision.result_message,
           data: {
-            plates: null
-          }
+            plates: null,
+          },
         };
       }
 
@@ -364,8 +364,8 @@ class ImpactVisionManager {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
         data: {
-          plates: plates
-        }
+          plates: plates,
+        },
       };
     } catch (error) {
       Logger.showError(String(error));
@@ -373,8 +373,8 @@ class ImpactVisionManager {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
         data: {
-          plates: null
-        }
+          plates: null,
+        },
       };
     }
   }
@@ -393,23 +393,23 @@ class ImpactVisionManager {
         `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
         `&shop_key=${this.SHOP_KEY}`,
-        `client_lock_key=${lockKey}`,
-        `client_lock_mode=unlock`,
-        `client_lock_time=${duration}`
+        `&client_lock_key=${lockKey}`,
+        `&client_lock_mode=unlock`,
+        `&client_lock_time=${duration}`,
       ].join("");
 
       const response = await Axios.get(url);
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        data: null
+        data: null,
       };
     } catch (error) {
       Logger.showError(String(error));
       return {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
-        data: null
+        data: null,
       };
     }
   }
@@ -427,22 +427,22 @@ class ImpactVisionManager {
         `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
         `&shop_key=${this.SHOP_KEY}`,
-        `client_lock_key=${lockKey}`,
-        `client_lock_mode=lock`
+        `&client_lock_key=${lockKey}`,
+        `&client_lock_mode=lock`,
       ].join("");
 
       const response = await Axios.get(url);
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        data: null
+        data: null,
       };
     } catch (error) {
       Logger.showError(String(error));
       return {
         resultCode: error.response.data.impactvision.result_code,
         resultMessage: error.response.data.impactvision.result_message,
-        data: null
+        data: null,
       };
     }
   }
@@ -452,17 +452,17 @@ class ImpactVisionManager {
       case 0:
         return {
           id: "ivm060117",
-          password: process.env.BRANCH_0
+          password: process.env.BRANCH_0,
         };
       case 1:
         return {
           id: "ivm130147",
-          password: process.env.BRANCH_1
+          password: process.env.BRANCH_1,
         };
       case 2:
         return {
           id: "ivm020109",
-          password: process.env.BRANCH_2
+          password: process.env.BRANCH_2,
         };
       default:
         return null;

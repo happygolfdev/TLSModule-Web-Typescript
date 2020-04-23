@@ -81,7 +81,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&ivm_pw=" + password,
                             "&ivm_name=" + name,
                             "&ivm_nick=" + nickname,
-                            "&ivm_hp=" + mobile
+                            "&ivm_hp=" + mobile,
                         ].join("");
                         return [4 /*yield*/, axios_1.default.get(url)];
                     case 2:
@@ -92,16 +92,16 @@ var ImpactVisionManager = /** @class */ (function () {
                                     resultCode: resultCode,
                                     resultMessage: response.data.impactvision.result_message,
                                     data: {
-                                        user: null
-                                    }
+                                        user: null,
+                                    },
                                 }];
                         }
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
                                 data: {
-                                    user: new impactVisionUser_1.ImpactVisionUser(response.data.impactvision.member_info)
-                                }
+                                    user: new impactVisionUser_1.ImpactVisionUser(response.data.impactvision.member_info),
+                                },
                             }];
                     case 3:
                         error_1 = _b.sent();
@@ -110,8 +110,8 @@ var ImpactVisionManager = /** @class */ (function () {
                                 resultCode: error_1.response.data.impactvision.result_code,
                                 resultMessage: error_1.response.data.impactvision.result_message,
                                 data: {
-                                    user: null
-                                }
+                                    user: null,
+                                },
                             }];
                     case 4: return [2 /*return*/];
                 }
@@ -146,7 +146,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&shop_key=" + this.SHOP_KEY,
                             "&ivm_id=" + username,
                             "&ivm_pw=" + password,
-                            "&ivm_pw_edit=" + password
+                            "&ivm_pw_edit=" + password,
                         ];
                         if (name != null) {
                             url.push("&ivm_name=" + name);
@@ -163,7 +163,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                data: null
+                                data: null,
                             }];
                     case 2:
                         error_2 = _b.sent();
@@ -171,7 +171,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: error_2.response.data.impactvision.result_code,
                                 resultMessage: error_2.response.data.impactvision.result_message,
-                                data: null
+                                data: null,
                             }];
                     case 3: return [2 /*return*/];
                 }
@@ -203,7 +203,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&shop_key=" + this.SHOP_KEY,
                             "&ivm_id=" + username,
                             "&ivm_pw=" + password,
-                            "&ivm_pw_edit=" + password
+                            "&ivm_pw_edit=" + password,
                         ];
                         return [4 /*yield*/, axios_1.default.get(url.join(""))];
                     case 1:
@@ -211,7 +211,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                data: null
+                                data: null,
                             }];
                     case 2:
                         error_3 = _b.sent();
@@ -219,7 +219,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: error_3.response.data.impactvision.result_code,
                                 resultMessage: error_3.response.data.impactvision.result_message,
-                                data: null
+                                data: null,
                             }];
                     case 3: return [2 /*return*/];
                 }
@@ -248,7 +248,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
                             "&shop_key=" + this.SHOP_KEY,
-                            "&ivm_id=" + username
+                            "&ivm_id=" + username,
                         ];
                         return [4 /*yield*/, axios_1.default.get(url.join(""))];
                     case 1:
@@ -258,8 +258,8 @@ var ImpactVisionManager = /** @class */ (function () {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
                                 data: {
-                                    isAvailable: isAvailable
-                                }
+                                    isAvailable: isAvailable,
+                                },
                             }];
                     case 2:
                         error_4 = _b.sent();
@@ -268,8 +268,8 @@ var ImpactVisionManager = /** @class */ (function () {
                                 resultCode: error_4.response.data.impactvision.result_code,
                                 resultMessage: error_4.response.data.impactvision.result_message,
                                 data: {
-                                    isAvailable: null
-                                }
+                                    isAvailable: null,
+                                },
                             }];
                     case 3: return [2 /*return*/];
                 }
@@ -297,7 +297,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&page_line=100",
                             "&shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
-                            "&shop_key=" + this.SHOP_KEY
+                            "&shop_key=" + this.SHOP_KEY,
                         ].join("");
                         return [4 /*yield*/, axios_1.default.get(url)];
                     case 1:
@@ -308,8 +308,8 @@ var ImpactVisionManager = /** @class */ (function () {
                                     resultCode: resultCode,
                                     resultMessage: response.data.impactvision.result_message,
                                     data: {
-                                        users: null
-                                    }
+                                        users: null,
+                                    },
                                 }];
                         }
                         usersObjArray = response.data.impactvision.member_info;
@@ -327,8 +327,8 @@ var ImpactVisionManager = /** @class */ (function () {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
                                 data: {
-                                    users: users
-                                }
+                                    users: users,
+                                },
                             }];
                     case 3:
                         error_5 = _b.sent();
@@ -337,8 +337,8 @@ var ImpactVisionManager = /** @class */ (function () {
                                 resultCode: error_5.response.data.impactvision.result_code,
                                 resultMessage: error_5.response.data.impactvision.result_message,
                                 data: {
-                                    users: null
-                                }
+                                    users: null,
+                                },
                             }];
                     case 4: return [2 /*return*/];
                 }
@@ -361,7 +361,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=List",
                             "&shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
-                            "&shop_key=" + this.SHOP_KEY
+                            "&shop_key=" + this.SHOP_KEY,
                         ].join("");
                         return [4 /*yield*/, axios_1.default.get(url)];
                     case 1:
@@ -371,7 +371,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             return [2 /*return*/, {
                                     resultCode: resultCode,
                                     resultMessage: response.data.impactvision.result_message,
-                                    data: null
+                                    data: null,
                                 }];
                         }
                         plateArray = response.data.impactvision.client_info;
@@ -393,8 +393,8 @@ var ImpactVisionManager = /** @class */ (function () {
                                 resultMessage: response.data.impactvision.result_message,
                                 data: {
                                     branchID: branchID,
-                                    plates: plates
-                                }
+                                    plates: plates,
+                                },
                             }];
                     case 3:
                         error_6 = _a.sent();
@@ -402,7 +402,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: error_6.response.data.impactvision.result_code,
                                 resultMessage: error_6.response.data.impactvision.result_message,
-                                data: null
+                                data: null,
                             }];
                     case 4: return [2 /*return*/];
                 }
@@ -428,7 +428,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=List",
                             "&shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
-                            "&shop_key=" + this.SHOP_KEY
+                            "&shop_key=" + this.SHOP_KEY,
                         ].join("");
                         return [4 /*yield*/, axios_1.default.get(url)];
                     case 1:
@@ -439,8 +439,8 @@ var ImpactVisionManager = /** @class */ (function () {
                                     resultCode: resultCode,
                                     resultMessage: response.data.impactvision.result_message,
                                     data: {
-                                        plates: null
-                                    }
+                                        plates: null,
+                                    },
                                 }];
                         }
                         plateArray = response.data.impactvision.client_info;
@@ -460,8 +460,8 @@ var ImpactVisionManager = /** @class */ (function () {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
                                 data: {
-                                    plates: plates
-                                }
+                                    plates: plates,
+                                },
                             }];
                     case 3:
                         error_7 = _b.sent();
@@ -470,8 +470,8 @@ var ImpactVisionManager = /** @class */ (function () {
                                 resultCode: error_7.response.data.impactvision.result_code,
                                 resultMessage: error_7.response.data.impactvision.result_message,
                                 data: {
-                                    plates: null
-                                }
+                                    plates: null,
+                                },
                             }];
                     case 4: return [2 /*return*/];
                 }
@@ -498,9 +498,9 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
                             "&shop_key=" + this.SHOP_KEY,
-                            "client_lock_key=" + lockKey,
-                            "client_lock_mode=unlock",
-                            "client_lock_time=" + duration
+                            "&client_lock_key=" + lockKey,
+                            "&client_lock_mode=unlock",
+                            "&client_lock_time=" + duration,
                         ].join("");
                         return [4 /*yield*/, axios_1.default.get(url)];
                     case 1:
@@ -508,7 +508,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                data: null
+                                data: null,
                             }];
                     case 2:
                         error_8 = _b.sent();
@@ -516,7 +516,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: error_8.response.data.impactvision.result_code,
                                 resultMessage: error_8.response.data.impactvision.result_message,
-                                data: null
+                                data: null,
                             }];
                     case 3: return [2 /*return*/];
                 }
@@ -542,8 +542,8 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
                             "&shop_key=" + this.SHOP_KEY,
-                            "client_lock_key=" + lockKey,
-                            "client_lock_mode=lock"
+                            "&client_lock_key=" + lockKey,
+                            "&client_lock_mode=lock",
                         ].join("");
                         return [4 /*yield*/, axios_1.default.get(url)];
                     case 1:
@@ -551,7 +551,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                data: null
+                                data: null,
                             }];
                     case 2:
                         error_9 = _b.sent();
@@ -559,7 +559,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: error_9.response.data.impactvision.result_code,
                                 resultMessage: error_9.response.data.impactvision.result_message,
-                                data: null
+                                data: null,
                             }];
                     case 3: return [2 /*return*/];
                 }
@@ -571,17 +571,17 @@ var ImpactVisionManager = /** @class */ (function () {
             case 0:
                 return {
                     id: "ivm060117",
-                    password: process.env.BRANCH_0
+                    password: process.env.BRANCH_0,
                 };
             case 1:
                 return {
                     id: "ivm130147",
-                    password: process.env.BRANCH_1
+                    password: process.env.BRANCH_1,
                 };
             case 2:
                 return {
                     id: "ivm020109",
-                    password: process.env.BRANCH_2
+                    password: process.env.BRANCH_2,
                 };
             default:
                 return null;

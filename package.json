@@ -1,6 +1,6 @@
 {
   "name": "tlsmodules",
-  "version": "1.3.12",
+  "version": "1.3.13",
   "description": "Moduels for TLS",
   "main": "dist/app.js",
   "scripts": {
