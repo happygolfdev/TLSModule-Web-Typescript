@@ -43,7 +43,7 @@ class ImpactVisionManager {
         `&ivm_hp=${mobile}`,
       ].join("");
 
-      const response = await Axios.get(url);
+      const response = await Axios.get(encodeURI(url));
       const resultCode = response.data.impactvision.result_code;
       if (resultCode == "FAIL") {
         return {
@@ -118,7 +118,7 @@ class ImpactVisionManager {
         url.push(`&ivm_hp=${mobile}`);
       }
 
-      const response = await Axios.get(url.join(""));
+      const response = await Axios.get(encodeURI(url.join("")));
 
       return {
         resultCode: response.data.impactvision.result_code,
@@ -161,7 +161,7 @@ class ImpactVisionManager {
         `&ivm_pw_edit=${password}`,
       ];
 
-      const response = await Axios.get(url.join(""));
+      const response = await Axios.get(encodeURI(url.join("")));
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
@@ -196,7 +196,7 @@ class ImpactVisionManager {
         `&ivm_id=${username}`,
       ];
 
-      const response = await Axios.get(url.join(""));
+      const response = await Axios.get(encodeURI(url.join("")));
 
       const isAvailable =
         response.data.impactvision.result_code == "SUCCESS" ? false : true;
@@ -288,7 +288,7 @@ class ImpactVisionManager {
         `&shop_key=${this.SHOP_KEY}`,
       ].join("");
 
-      const response = await Axios.get(url);
+      const response = await Axios.get(encodeURI(url));
       const resultCode = response.data.impactvision.result_code;
       if (resultCode == "FAIL") {
         return {
@@ -340,7 +340,7 @@ class ImpactVisionManager {
         `&shop_key=${this.SHOP_KEY}`,
       ].join("");
 
-      const response = await Axios.get(url);
+      const response = await Axios.get(encodeURI(url));
       const resultCode = response.data.impactvision.result_code;
       if (resultCode == "FAIL") {
         return {
@@ -398,7 +398,7 @@ class ImpactVisionManager {
         `&client_lock_time=${duration}`,
       ].join("");
 
-      const response = await Axios.get(url);
+      const response = await Axios.get(encodeURI(url));
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
@@ -431,7 +431,7 @@ class ImpactVisionManager {
         `&client_lock_mode=lock`,
       ].join("");
 
-      const response = await Axios.get(url);
+      const response = await Axios.get(encodeURI(url));
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,

@@ -83,7 +83,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&ivm_nick=" + nickname,
                             "&ivm_hp=" + mobile,
                         ].join("");
-                        return [4 /*yield*/, axios_1.default.get(url)];
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
                     case 2:
                         response = _b.sent();
                         resultCode = response.data.impactvision.result_code;
@@ -157,7 +157,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         if (mobile != null) {
                             url.push("&ivm_hp=" + mobile);
                         }
-                        return [4 /*yield*/, axios_1.default.get(url.join(""))];
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url.join("")))];
                     case 1:
                         response = _b.sent();
                         return [2 /*return*/, {
@@ -205,7 +205,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&ivm_pw=" + password,
                             "&ivm_pw_edit=" + password,
                         ];
-                        return [4 /*yield*/, axios_1.default.get(url.join(""))];
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url.join("")))];
                     case 1:
                         response = _b.sent();
                         return [2 /*return*/, {
@@ -250,7 +250,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&shop_key=" + this.SHOP_KEY,
                             "&ivm_id=" + username,
                         ];
-                        return [4 /*yield*/, axios_1.default.get(url.join(""))];
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url.join("")))];
                     case 1:
                         response = _b.sent();
                         isAvailable = response.data.impactvision.result_code == "SUCCESS" ? false : true;
@@ -363,7 +363,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&shop_id=" + shopID,
                             "&shop_key=" + this.SHOP_KEY,
                         ].join("");
-                        return [4 /*yield*/, axios_1.default.get(url)];
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
                     case 1:
                         response = _a.sent();
                         resultCode = response.data.impactvision.result_code;
@@ -430,7 +430,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&shop_id=" + shopID,
                             "&shop_key=" + this.SHOP_KEY,
                         ].join("");
-                        return [4 /*yield*/, axios_1.default.get(url)];
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
                     case 1:
                         response = _b.sent();
                         resultCode = response.data.impactvision.result_code;
@@ -502,7 +502,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&client_lock_mode=unlock",
                             "&client_lock_time=" + duration,
                         ].join("");
-                        return [4 /*yield*/, axios_1.default.get(url)];
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
                     case 1:
                         response = _b.sent();
                         return [2 /*return*/, {
@@ -545,7 +545,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&client_lock_key=" + lockKey,
                             "&client_lock_mode=lock",
                         ].join("");
-                        return [4 /*yield*/, axios_1.default.get(url)];
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
                     case 1:
                         response = _b.sent();
                         return [2 /*return*/, {
