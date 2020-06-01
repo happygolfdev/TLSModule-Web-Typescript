@@ -568,20 +568,25 @@ var ImpactVisionManager = /** @class */ (function () {
     };
     ImpactVisionManager.prototype.getBranchInfo = function (branchID) {
         switch (branchID) {
-            case 0:
+            case 0: //삼성점
                 return {
                     id: "ivm060117",
                     password: process.env.BRANCH_0,
                 };
-            case 1:
+            case 1: // 위례점
                 return {
                     id: "ivm130147",
                     password: process.env.BRANCH_1,
                 };
-            case 2:
+            case 2: //성북점
                 return {
                     id: "ivm020109",
                     password: process.env.BRANCH_2,
+                };
+            case 3: //서현
+                return {
+                    id: "ivm130197",
+                    password: process.env.BRANCH_3,
                 };
             default:
                 return null;
@@ -595,7 +600,7 @@ var ImpactVisionManager = /** @class */ (function () {
                 return 1;
             case "ivm020109": //성북
                 return 2;
-            case "반포":
+            case "ivm130197": //서현
                 return 3;
             case "잠실":
                 return 4;
