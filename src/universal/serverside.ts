@@ -7,7 +7,7 @@ import { Logger } from "./logger";
  * @param message 메세지
  * @param data 응답 데이터
  */
-async function response(
+async function respond(
   response: any,
   statusCode: Number,
   message: String,
@@ -26,7 +26,7 @@ async function response(
       resultCode: resultCode,
       statusCode: statusCode,
       message: message,
-      Data: data
+      Data: data,
     });
   } catch (error) {
     response.header("Access-Control-Allow-headers", "content-type");
@@ -38,9 +38,9 @@ async function response(
 
     return await response.status(500).json({
       statusCode: statusCode,
-      message: `server error: ${error.message}`
+      message: `server error: ${error.message}`,
     });
   }
 }
 
-export { response };
+export { respond };
