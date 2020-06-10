@@ -380,6 +380,167 @@ class ImpactVisionManager {
   }
 
   /**
+   * 해당 지점의 모든 타석과 타석주변장치의 현황을 받아온다.
+   * @param branchID 지점 번호
+   */
+  public async getAllStatus(branchID: Number) {
+    try {
+      const shopID = this.getBranchInfo(branchID)?.id;
+      console.log(shopID);
+      const url = [
+        `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=List`,
+        `&shop_pid=${this.SHOP_PID}`,
+        `&shop_id=${shopID}`,
+        `&shop_key=${this.SHOP_KEY}`,
+      ].join("");
+
+      const response = await Axios.get(encodeURI(url));
+      const resultCode = response.data.impactvision.result_code;
+      if (resultCode == "FAIL") {
+        return {
+          resultCode: resultCode,
+          resultMessage: response.data.impactvision.result_message,
+          data: {
+            status: null,
+          },
+        };
+      }
+
+      const plateArray = response.data.impactvision.client_info;
+      var plates: ImpactVisionPlate[] = [];
+      await repeat(plateArray, async (plateObjc, idx) => {
+        console.log(`${idx} ${plateObjc}`);
+        const plate = new ImpactVisionPlate(idx, plateObjc);
+        plates.push(plate);
+      });
+
+      return {
+        resultCode: response.data.impactvision.result_code,
+        resultMessage: response.data.impactvision.result_message,
+        data: {
+          plates: plates,
+        },
+      };
+    } catch (error) {
+      Logger.showError(String(error));
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        data: {
+          plates: null,
+        },
+      };
+    }
+  }
+
+  /**
+   * 타석 컴퓨터를 제어한다.
+   * @param branchID 지점 번호
+   * @param lockKey 제어할 타석의 lockKey
+   * @param toBeOn 컴퓨터가 켜질지 아니면 꺼질지
+   */
+  public async controlComputer(
+    branchID: Number,
+    lockKey: String,
+    toBeOn: Boolean
+  ) {
+    try {
+      const shopID = this.getBranchInfo(branchID)?.id;
+      const lockMode = toBeOn ? "pc_on" : "pc_off";
+      const url = [
+        `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=Ctrl`,
+        `&shop_pid=${this.SHOP_PID}`,
+        `&shop_id=${shopID}`,
+        `&shop_key=${this.SHOP_KEY}`,
+        `&client_lock_key=${lockKey}`,
+        `&client_lock_mode=${lockMode}`,
+      ].join("");
+
+      const response = await Axios.get(encodeURI(url));
+      return {
+        resultCode: response.data.impactvision.result_code,
+        resultMessage: response.data.impactvision.result_message,
+        data: null,
+      };
+    } catch (error) {
+      Logger.showError(String(error));
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        data: null,
+      };
+    }
+  }
+
+  /**
+   * 타석 게임을 제어한다.
+   * @param branchID 지점 번호
+   * @param lockKey 제어할 타석의 lockKey
+   * @param toBeOn 게임이 켜질지 아니면 꺼질지
+   */
+  public async controlGame(branchID: Number, lockKey: String, toBeOn: Boolean) {
+    try {
+      const shopID = this.getBranchInfo(branchID)?.id;
+      const lockMode = toBeOn ? "game_on" : "game_off";
+      const url = [
+        `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=Ctrl`,
+        `&shop_pid=${this.SHOP_PID}`,
+        `&shop_id=${shopID}`,
+        `&shop_key=${this.SHOP_KEY}`,
+        `&client_lock_key=${lockKey}`,
+        `&client_lock_mode=${lockMode}`,
+      ].join("");
+
+      const response = await Axios.get(encodeURI(url));
+      return {
+        resultCode: response.data.impactvision.result_code,
+        resultMessage: response.data.impactvision.result_message,
+        data: null,
+      };
+    } catch (error) {
+      Logger.showError(String(error));
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        data: null,
+      };
+    }
+  }
+
+  /**
+   * 타석 프로젝터를 제어한다.
+   * @param branchID 지점 번호
+   * @param lockKey 제어할 타석의 lockKey
+   */
+  public async controlProjector(branchID: Number, lockKey: String) {
+    try {
+      const shopID = this.getBranchInfo(branchID)?.id;
+      const url = [
+        `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=Ctrl`,
+        `&shop_pid=${this.SHOP_PID}`,
+        `&shop_id=${shopID}`,
+        `&shop_key=${this.SHOP_KEY}`,
+        `&client_lock_key=${lockKey}`,
+        `&client_lock_mode=pj_signal`,
+      ].join("");
+
+      const response = await Axios.get(encodeURI(url));
+      return {
+        resultCode: response.data.impactvision.result_code,
+        resultMessage: response.data.impactvision.result_message,
+        data: null,
+      };
+    } catch (error) {
+      Logger.showError(String(error));
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        data: null,
+      };
+    }
+  }
+
+  /**
    * 타석을 수동으로 시작한다.
    * @param branchID 지점 번호
    * @param lockKey 제어할 타석의 lockKey

@@ -43,7 +43,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param message 메세지
  * @param data 응답 데이터
  */
-function respond(response, statusCode, message, data, resultCode) {
+function response(response, statusCode, message, data, resultCode) {
     return __awaiter(this, void 0, void 0, function () {
         var error_1;
         return __generator(this, function (_a) {
@@ -75,4 +75,4 @@ function respond(response, statusCode, message, data, resultCode) {
         });
     });
 }
-exports.respond = respond;
+exports.response = response;
