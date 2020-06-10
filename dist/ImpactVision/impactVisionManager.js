@@ -479,6 +479,208 @@ var ImpactVisionManager = /** @class */ (function () {
         });
     };
     /**
+     * 해당 지점의 모든 타석과 타석주변장치의 현황을 받아온다.
+     * @param branchID 지점 번호
+     */
+    ImpactVisionManager.prototype.getAllStatus = function (branchID) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var shopID, url, response, resultCode, plateArray, plates, error_8;
+            var _this = this;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 3, , 4]);
+                        shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
+                        console.log(shopID);
+                        url = [
+                            "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=List",
+                            "&shop_pid=" + this.SHOP_PID,
+                            "&shop_id=" + shopID,
+                            "&shop_key=" + this.SHOP_KEY,
+                        ].join("");
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
+                    case 1:
+                        response = _b.sent();
+                        resultCode = response.data.impactvision.result_code;
+                        if (resultCode == "FAIL") {
+                            return [2 /*return*/, {
+                                    resultCode: resultCode,
+                                    resultMessage: response.data.impactvision.result_message,
+                                    data: {
+                                        status: null,
+                                    },
+                                }];
+                        }
+                        plateArray = response.data.impactvision.client_info;
+                        plates = [];
+                        return [4 /*yield*/, universal_1.repeat(plateArray, function (plateObjc, idx) { return __awaiter(_this, void 0, void 0, function () {
+                                var plate;
+                                return __generator(this, function (_a) {
+                                    console.log(idx + " " + plateObjc);
+                                    plate = new impactVisionPlate_1.ImpactVisionPlate(idx, plateObjc);
+                                    plates.push(plate);
+                                    return [2 /*return*/];
+                                });
+                            }); })];
+                    case 2:
+                        _b.sent();
+                        return [2 /*return*/, {
+                                resultCode: response.data.impactvision.result_code,
+                                resultMessage: response.data.impactvision.result_message,
+                                data: {
+                                    plates: plates,
+                                },
+                            }];
+                    case 3:
+                        error_8 = _b.sent();
+                        logger_1.Logger.showError(String(error_8));
+                        return [2 /*return*/, {
+                                resultCode: error_8.response.data.impactvision.result_code,
+                                resultMessage: error_8.response.data.impactvision.result_message,
+                                data: {
+                                    plates: null,
+                                },
+                            }];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * 타석 컴퓨터를 제어한다.
+     * @param branchID 지점 번호
+     * @param lockKey 제어할 타석의 lockKey
+     * @param toBeOn 컴퓨터가 켜질지 아니면 꺼질지
+     */
+    ImpactVisionManager.prototype.controlComputer = function (branchID, lockKey, toBeOn) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var shopID, lockMode, url, response, error_9;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
+                        lockMode = toBeOn ? "pc_on" : "pc_off";
+                        url = [
+                            "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=Ctrl",
+                            "&shop_pid=" + this.SHOP_PID,
+                            "&shop_id=" + shopID,
+                            "&shop_key=" + this.SHOP_KEY,
+                            "&client_lock_key=" + lockKey,
+                            "&client_lock_mode=" + lockMode,
+                        ].join("");
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
+                    case 1:
+                        response = _b.sent();
+                        return [2 /*return*/, {
+                                resultCode: response.data.impactvision.result_code,
+                                resultMessage: response.data.impactvision.result_message,
+                                data: null,
+                            }];
+                    case 2:
+                        error_9 = _b.sent();
+                        logger_1.Logger.showError(String(error_9));
+                        return [2 /*return*/, {
+                                resultCode: error_9.response.data.impactvision.result_code,
+                                resultMessage: error_9.response.data.impactvision.result_message,
+                                data: null,
+                            }];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * 타석 게임을 제어한다.
+     * @param branchID 지점 번호
+     * @param lockKey 제어할 타석의 lockKey
+     * @param toBeOn 게임이 켜질지 아니면 꺼질지
+     */
+    ImpactVisionManager.prototype.controlGame = function (branchID, lockKey, toBeOn) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var shopID, lockMode, url, response, error_10;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
+                        lockMode = toBeOn ? "game_on" : "game_off";
+                        url = [
+                            "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=Ctrl",
+                            "&shop_pid=" + this.SHOP_PID,
+                            "&shop_id=" + shopID,
+                            "&shop_key=" + this.SHOP_KEY,
+                            "&client_lock_key=" + lockKey,
+                            "&client_lock_mode=" + lockMode,
+                        ].join("");
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
+                    case 1:
+                        response = _b.sent();
+                        return [2 /*return*/, {
+                                resultCode: response.data.impactvision.result_code,
+                                resultMessage: response.data.impactvision.result_message,
+                                data: null,
+                            }];
+                    case 2:
+                        error_10 = _b.sent();
+                        logger_1.Logger.showError(String(error_10));
+                        return [2 /*return*/, {
+                                resultCode: error_10.response.data.impactvision.result_code,
+                                resultMessage: error_10.response.data.impactvision.result_message,
+                                data: null,
+                            }];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * 타석 프로젝터를 제어한다.
+     * @param branchID 지점 번호
+     * @param lockKey 제어할 타석의 lockKey
+     */
+    ImpactVisionManager.prototype.controlProjector = function (branchID, lockKey) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var shopID, url, response, error_11;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
+                        url = [
+                            "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=Ctrl",
+                            "&shop_pid=" + this.SHOP_PID,
+                            "&shop_id=" + shopID,
+                            "&shop_key=" + this.SHOP_KEY,
+                            "&client_lock_key=" + lockKey,
+                            "&client_lock_mode=pj_signal",
+                        ].join("");
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
+                    case 1:
+                        response = _b.sent();
+                        return [2 /*return*/, {
+                                resultCode: response.data.impactvision.result_code,
+                                resultMessage: response.data.impactvision.result_message,
+                                data: null,
+                            }];
+                    case 2:
+                        error_11 = _b.sent();
+                        logger_1.Logger.showError(String(error_11));
+                        return [2 /*return*/, {
+                                resultCode: error_11.response.data.impactvision.result_code,
+                                resultMessage: error_11.response.data.impactvision.result_message,
+                                data: null,
+                            }];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
      * 타석을 수동으로 시작한다.
      * @param branchID 지점 번호
      * @param lockKey 제어할 타석의 lockKey
@@ -487,7 +689,7 @@ var ImpactVisionManager = /** @class */ (function () {
     ImpactVisionManager.prototype.openPlate = function (branchID, lockKey, duration) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var shopID, url, response, error_8;
+            var shopID, url, response, error_12;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -511,11 +713,11 @@ var ImpactVisionManager = /** @class */ (function () {
                                 data: null,
                             }];
                     case 2:
-                        error_8 = _b.sent();
-                        logger_1.Logger.showError(String(error_8));
+                        error_12 = _b.sent();
+                        logger_1.Logger.showError(String(error_12));
                         return [2 /*return*/, {
-                                resultCode: error_8.response.data.impactvision.result_code,
-                                resultMessage: error_8.response.data.impactvision.result_message,
+                                resultCode: error_12.response.data.impactvision.result_code,
+                                resultMessage: error_12.response.data.impactvision.result_message,
                                 data: null,
                             }];
                     case 3: return [2 /*return*/];
@@ -531,7 +733,7 @@ var ImpactVisionManager = /** @class */ (function () {
     ImpactVisionManager.prototype.shutPlate = function (branchID, lockKey) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var shopID, url, response, error_9;
+            var shopID, url, response, error_13;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -554,11 +756,11 @@ var ImpactVisionManager = /** @class */ (function () {
                                 data: null,
                             }];
                     case 2:
-                        error_9 = _b.sent();
-                        logger_1.Logger.showError(String(error_9));
+                        error_13 = _b.sent();
+                        logger_1.Logger.showError(String(error_13));
                         return [2 /*return*/, {
-                                resultCode: error_9.response.data.impactvision.result_code,
-                                resultMessage: error_9.response.data.impactvision.result_message,
+                                resultCode: error_13.response.data.impactvision.result_code,
+                                resultMessage: error_13.response.data.impactvision.result_message,
                                 data: null,
                             }];
                     case 3: return [2 /*return*/];

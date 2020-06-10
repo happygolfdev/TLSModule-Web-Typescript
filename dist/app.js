@@ -36,27 +36,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-var exampleUser_1 = require("./examples/exampleUser");
-var logger_1 = require("./universal/logger");
-var membershipManager_1 = require("./membership/membershipManager");
 var impactVisionManager_1 = require("./ImpactVision/impactVisionManager");
 var accessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNTc5MDA4MzgwLCJleHAiOjE1ODI2MDgzODAsImlzcyI6IkFydGlsZWFybiJ9.kkYmp6yN8HiveOjBA5ZbPst0z7Bu-KX-X-q8t1govwM";
 var clientSecretKey = "7918c66fd8d7792a73ce0730dde6823ed07b1f7d259bf3c26f5c8d3517b1d3a5a00715d71abf187208e4aa334e447752";
-function renew() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, newToken, error;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4 /*yield*/, membershipManager_1.MembershipManager.renewAccessToken(clientSecretKey)];
-                case 1:
-                    _a = _b.sent(), newToken = _a.newToken, error = _a.error;
-                    accessToken = newToken;
-                    logger_1.Logger.showMessage(accessToken);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
 var ivManager = new impactVisionManager_1.ImpactVisionManager();
 function signUpForIV() {
     return __awaiter(this, void 0, void 0, function () {
@@ -142,50 +124,3 @@ function checkImpactVisionUsername() {
         });
     });
 }
-function signUp() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, error, status, User;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4 /*yield*/, membershipManager_1.MembershipManager.signUp(accessToken, "mteaasaat01@srg.com", 1, "asdf", 0, "nickname")];
-                case 1:
-                    _a = _b.sent(), error = _a.error, status = _a.status, User = _a.User;
-                    console.log(error);
-                    console.log(status);
-                    console.log(User);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-function reset() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, error, status, User;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4 /*yield*/, membershipManager_1.MembershipManager.resetPassword(accessToken, 11, "null")];
-                case 1:
-                    _a = _b.sent(), error = _a.error, status = _a.status, User = _a.User;
-                    console.log(error);
-                    console.log(status);
-                    console.log(User);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-function check() {
-    return __awaiter(this, void 0, void 0, function () {
-        var _a, error, isAvailable;
-        return __generator(this, function (_b) {
-            switch (_b.label) {
-                case 0: return [4 /*yield*/, membershipManager_1.MembershipManager.checkEmail(accessToken, "ajajeui0308@gmail.com", 0)];
-                case 1:
-                    _a = _b.sent(), error = _a.error, isAvailable = _a.isAvailable;
-                    console.log(isAvailable);
-                    return [2 /*return*/];
-            }
-        });
-    });
-}
-var exampleUser = new exampleUser_1.ExampleUser(1, "asdf", "Asdf", "nickname");
