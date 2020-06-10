@@ -7,7 +7,7 @@ import { Logger } from "./logger";
  * @param message 메세지
  * @param data 응답 데이터
  */
-async function respond(
+async function response(
   response: any,
   statusCode: Number,
   message: String,
@@ -43,4 +43,4 @@ async function respond(
   }
 }
 
-export { respond };
+export { response };
