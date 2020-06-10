@@ -7,7 +7,7 @@ import { repeat } from "../universal/universal";
 class ImpactVisionManager {
   BASE_URL = "http://my.impactvision.co.kr/webapi";
   AUTH_ENDPOINT = "/callback.php";
-  PLATE_CONTROL_ENPOINT = "/ctrl.php";
+  PLATE_CONTROL_ENPOINT = "/ctrl.v2.php";
 
   SHOP_PID = "happy_gf";
   SHOP_KEY = "MjdsMUxkME02Nk1GM2RiU2J2eVJqd2tuK2xKZE0rT3NBdkVSbU1SSXppcz0";
