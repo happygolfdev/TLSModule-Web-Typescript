@@ -437,23 +437,17 @@ class ImpactVisionManager {
    * 타석 컴퓨터를 제어한다.
    * @param branchID 지점 번호
    * @param lockKey 제어할 타석의 lockKey
-   * @param toBeOn 컴퓨터가 켜질지 아니면 꺼질지
    */
-  public async controlComputer(
-    branchID: Number,
-    lockKey: String,
-    toBeOn: Boolean
-  ) {
+  public async turnComputerOff(branchID: Number, lockKey: String) {
     try {
       const shopID = this.getBranchInfo(branchID)?.id;
-      const lockMode = toBeOn ? "pc_on" : "pc_off";
       const url = [
         `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=Ctrl`,
         `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
         `&shop_key=${this.SHOP_KEY}`,
         `&client_lock_key=${lockKey}`,
-        `&client_lock_mode=${lockMode}`,
+        `&client_lock_mode=pc_off`,
       ].join("");
 
       const response = await Axios.get(encodeURI(url));
@@ -514,6 +508,34 @@ class ImpactVisionManager {
    */
   public async controlProjector(branchID: Number, lockKey: String) {
     try {
+      const { resultCode, resultMessage, data } = await this.getAllStatus(
+        branchID
+      );
+      if (resultCode === "FAIL") {
+        Logger.showError(resultMessage);
+        return {
+          resultCode: resultCode,
+          resultMessage: resultMessage,
+          data: null,
+        };
+      }
+
+      const plates = data.plates;
+      let isProjectOn = undefined;
+      await plates?.forEach(async (plate) => {
+        if (plate.lockKey === lockKey) {
+          isProjectOn = plate.isProjectorOn;
+        }
+      });
+
+      if (isProjectOn === null) {
+        return {
+          resultCode: "FAIL",
+          resultMessage: "projector cannot be remote controlled",
+          data: null,
+        };
+      }
+
       const shopID = this.getBranchInfo(branchID)?.id;
       const url = [
         `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=Ctrl`,
