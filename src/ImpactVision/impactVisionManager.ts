@@ -565,12 +565,12 @@ class ImpactVisionManager {
   }
 
   /**
-   * 일반 라운드 데이터를 받아온다
+   * 라운드 목록 데이터를 받아온다
    * @param branchID 지점 번호
    * @param phoneNumber 회원의 휴대폰 번호
    * @param pageIndex 페이지 index
    */
-  public async getRoundData(
+  public async getRoundsData(
     branchID: Number,
     phoneNumber: String,
     pageIndex: Number
@@ -585,6 +585,115 @@ class ImpactVisionManager {
         `&shop_key=${this.SHOP_KEY}`,
         `&ivm_id=${phoneNumber}`,
         `page_idx=${pageIndex}`,
+        `game_type=normal`,
+        `page_line=100`,
+      ].join("");
+
+      const response = await Axios.get(encodeURI(url));
+      if (response.data.impactvision.result_code === "FAIL") {
+        Logger.showError(response.data.impactvision.result_message);
+        return {
+          resultCode: response.data.impactvision.result_code,
+          resultMessage: response.data.impactvision.result_message,
+          data: null,
+        };
+      }
+
+      const roundDataObjcArray: any[] = response.data.impactvision.game_info;
+      let roundDataList: RoundData[] = [];
+      await roundDataObjcArray.forEach(async (roundDataObjc: any) => {
+        const roundData = new RoundData(roundDataObjc);
+        roundDataList.push(roundData);
+      });
+
+      return {
+        resultCode: response.data.impactvision.result_code,
+        resultMessage: response.data.impactvision.result_message,
+        data: roundDataList,
+      };
+    } catch (error) {
+      Logger.showError(String(error));
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        data: null,
+      };
+    }
+  }
+
+  /**
+   * 라운드의 스코어 카드를 가져온다.
+   * @param branchID 지점 번호
+   * @param phoneNumber 회원의 휴대폰 번호
+   * @param roundID 라운드 고유번호
+   */
+  public async getScoreCard(
+    branchID: Number,
+    phoneNumber: String,
+    roundID: Number
+  ) {
+    try {
+      const shopID = this.getBranchInfo(branchID)?.id;
+      const url = [
+        `${this.BASE_URL}${this.GAME_ENPOINT}`,
+        `?st_type=game_list`,
+        `&shop_pid=${this.SHOP_PID}`,
+        `&shop_id=${shopID}`,
+        `&shop_key=${this.SHOP_KEY}`,
+        `&ivm_id=${phoneNumber}`,
+        `&gm_index=${roundID}`,
+      ].join("");
+
+      const response = await Axios.get(encodeURI(url));
+      if (response.data.impactvision.result_code === "FAIL") {
+        Logger.showError(response.data.impactvision.result_message);
+        return {
+          resultCode: response.data.impactvision.result_code,
+          resultMessage: response.data.impactvision.result_message,
+          data: null,
+        };
+      }
+
+      const scoreCardObjcArray: any[] = response.data.impactvision.scorecard;
+      const scoreCard = new ScoreCard(scoreCardObjcArray);
+
+      return {
+        resultCode: response.data.impactvision.result_code,
+        resultMessage: response.data.impactvision.result_message,
+        data: scoreCard,
+      };
+    } catch (error) {
+      Logger.showError(String(error));
+      return {
+        resultCode: error.response.data.impactvision.result_code,
+        resultMessage: error.response.data.impactvision.result_message,
+        data: null,
+      };
+    }
+  }
+
+  /**
+   * 골프력 진단의 결과 목록을 받아온다
+   * @param branchID 지점 번호
+   * @param phoneNumber 회원의 휴대폰 번호
+   * @param pageIndex 페이지 index
+   */
+  public async getDignoseData(
+    branchID: Number,
+    phoneNumber: String,
+    pageIndex: Number
+  ) {
+    try {
+      const shopID = this.getBranchInfo(branchID)?.id;
+      const url = [
+        `${this.BASE_URL}${this.GAME_ENPOINT}`,
+        `?st_type=game_list`,
+        `&shop_pid=${this.SHOP_PID}`,
+        `&shop_id=${shopID}`,
+        `&shop_key=${this.SHOP_KEY}`,
+        `&ivm_id=${phoneNumber}`,
+        `page_idx=${pageIndex}`,
+        `game_type=exam`,
         `page_line=100`,
       ].join("");
 
@@ -665,57 +774,6 @@ class ImpactVisionManager {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
         data: hgGameList,
-      };
-    } catch (error) {
-      Logger.showError(String(error));
-      return {
-        resultCode: error.response.data.impactvision.result_code,
-        resultMessage: error.response.data.impactvision.result_message,
-        data: null,
-      };
-    }
-  }
-
-  /**
-   * 라운드의 스코어 카드를 가져온다.
-   * @param branchID 지점 번호
-   * @param phoneNumber 회원의 휴대폰 번호
-   * @param roundID 라운드 고유번호
-   */
-  public async getScoreCard(
-    branchID: Number,
-    phoneNumber: String,
-    roundID: Number
-  ) {
-    try {
-      const shopID = this.getBranchInfo(branchID)?.id;
-      const url = [
-        `${this.BASE_URL}${this.GAME_ENPOINT}`,
-        `?st_type=game_list`,
-        `&shop_pid=${this.SHOP_PID}`,
-        `&shop_id=${shopID}`,
-        `&shop_key=${this.SHOP_KEY}`,
-        `&ivm_id=${phoneNumber}`,
-        `&gm_index=${roundID}`,
-      ].join("");
-
-      const response = await Axios.get(encodeURI(url));
-      if (response.data.impactvision.result_code === "FAIL") {
-        Logger.showError(response.data.impactvision.result_message);
-        return {
-          resultCode: response.data.impactvision.result_code,
-          resultMessage: response.data.impactvision.result_message,
-          data: null,
-        };
-      }
-
-      const scoreCardObjcArray: any[] = response.data.impactvision.scorecard;
-      const scoreCard = new ScoreCard(scoreCardObjcArray);
-
-      return {
-        resultCode: response.data.impactvision.result_code,
-        resultMessage: response.data.impactvision.result_message,
-        data: scoreCard,
       };
     } catch (error) {
       Logger.showError(String(error));

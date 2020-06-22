@@ -713,12 +713,12 @@ var ImpactVisionManager = /** @class */ (function () {
         });
     };
     /**
-     * 일반 라운드 데이터를 받아온다
+     * 라운드 목록 데이터를 받아온다
      * @param branchID 지점 번호
      * @param phoneNumber 회원의 휴대폰 번호
      * @param pageIndex 페이지 index
      */
-    ImpactVisionManager.prototype.getRoundData = function (branchID, phoneNumber, pageIndex) {
+    ImpactVisionManager.prototype.getRoundsData = function (branchID, phoneNumber, pageIndex) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
             var shopID, url, response, roundDataObjcArray, roundDataList_1, error_12;
@@ -736,6 +736,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&shop_key=" + this.SHOP_KEY,
                             "&ivm_id=" + phoneNumber,
                             "page_idx=" + pageIndex,
+                            "game_type=normal",
                             "page_line=100",
                         ].join("");
                         return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
@@ -780,6 +781,129 @@ var ImpactVisionManager = /** @class */ (function () {
         });
     };
     /**
+     * 라운드의 스코어 카드를 가져온다.
+     * @param branchID 지점 번호
+     * @param phoneNumber 회원의 휴대폰 번호
+     * @param roundID 라운드 고유번호
+     */
+    ImpactVisionManager.prototype.getScoreCard = function (branchID, phoneNumber, roundID) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var shopID, url, response, scoreCardObjcArray, scoreCard, error_13;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 2, , 3]);
+                        shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
+                        url = [
+                            "" + this.BASE_URL + this.GAME_ENPOINT,
+                            "?st_type=game_list",
+                            "&shop_pid=" + this.SHOP_PID,
+                            "&shop_id=" + shopID,
+                            "&shop_key=" + this.SHOP_KEY,
+                            "&ivm_id=" + phoneNumber,
+                            "&gm_index=" + roundID,
+                        ].join("");
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
+                    case 1:
+                        response = _b.sent();
+                        if (response.data.impactvision.result_code === "FAIL") {
+                            logger_1.Logger.showError(response.data.impactvision.result_message);
+                            return [2 /*return*/, {
+                                    resultCode: response.data.impactvision.result_code,
+                                    resultMessage: response.data.impactvision.result_message,
+                                    data: null,
+                                }];
+                        }
+                        scoreCardObjcArray = response.data.impactvision.scorecard;
+                        scoreCard = new scoreCard_1.ScoreCard(scoreCardObjcArray);
+                        return [2 /*return*/, {
+                                resultCode: response.data.impactvision.result_code,
+                                resultMessage: response.data.impactvision.result_message,
+                                data: scoreCard,
+                            }];
+                    case 2:
+                        error_13 = _b.sent();
+                        logger_1.Logger.showError(String(error_13));
+                        return [2 /*return*/, {
+                                resultCode: error_13.response.data.impactvision.result_code,
+                                resultMessage: error_13.response.data.impactvision.result_message,
+                                data: null,
+                            }];
+                    case 3: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
+     * 골프력 진단의 결과 목록을 받아온다
+     * @param branchID 지점 번호
+     * @param phoneNumber 회원의 휴대폰 번호
+     * @param pageIndex 페이지 index
+     */
+    ImpactVisionManager.prototype.getDignoseData = function (branchID, phoneNumber, pageIndex) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function () {
+            var shopID, url, response, roundDataObjcArray, roundDataList_2, error_14;
+            var _this = this;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0:
+                        _b.trys.push([0, 3, , 4]);
+                        shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
+                        url = [
+                            "" + this.BASE_URL + this.GAME_ENPOINT,
+                            "?st_type=game_list",
+                            "&shop_pid=" + this.SHOP_PID,
+                            "&shop_id=" + shopID,
+                            "&shop_key=" + this.SHOP_KEY,
+                            "&ivm_id=" + phoneNumber,
+                            "page_idx=" + pageIndex,
+                            "game_type=exam",
+                            "page_line=100",
+                        ].join("");
+                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
+                    case 1:
+                        response = _b.sent();
+                        if (response.data.impactvision.result_code === "FAIL") {
+                            logger_1.Logger.showError(response.data.impactvision.result_message);
+                            return [2 /*return*/, {
+                                    resultCode: response.data.impactvision.result_code,
+                                    resultMessage: response.data.impactvision.result_message,
+                                    data: null,
+                                }];
+                        }
+                        roundDataObjcArray = response.data.impactvision.game_info;
+                        roundDataList_2 = [];
+                        return [4 /*yield*/, roundDataObjcArray.forEach(function (roundDataObjc) { return __awaiter(_this, void 0, void 0, function () {
+                                var roundData;
+                                return __generator(this, function (_a) {
+                                    roundData = new scoreCard_1.RoundData(roundDataObjc);
+                                    roundDataList_2.push(roundData);
+                                    return [2 /*return*/];
+                                });
+                            }); })];
+                    case 2:
+                        _b.sent();
+                        return [2 /*return*/, {
+                                resultCode: response.data.impactvision.result_code,
+                                resultMessage: response.data.impactvision.result_message,
+                                data: roundDataList_2,
+                            }];
+                    case 3:
+                        error_14 = _b.sent();
+                        logger_1.Logger.showError(String(error_14));
+                        return [2 /*return*/, {
+                                resultCode: error_14.response.data.impactvision.result_code,
+                                resultMessage: error_14.response.data.impactvision.result_message,
+                                data: null,
+                            }];
+                    case 4: return [2 /*return*/];
+                }
+            });
+        });
+    };
+    /**
      * 골프력 게임의 데이터를 받아온다
      * @param branchID 지점 번호
      * @param phoneNumber 회원의 휴대폰 번호
@@ -788,7 +912,7 @@ var ImpactVisionManager = /** @class */ (function () {
     ImpactVisionManager.prototype.getHGGAMEList = function (branchID, phoneNumber, pageIndex) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var shopID, url, response, hgGameObjcArray, hgGameList_1, error_13;
+            var shopID, url, response, hgGameObjcArray, hgGameList_1, error_15;
             var _this = this;
             return __generator(this, function (_b) {
                 switch (_b.label) {
@@ -834,69 +958,14 @@ var ImpactVisionManager = /** @class */ (function () {
                                 data: hgGameList_1,
                             }];
                     case 3:
-                        error_13 = _b.sent();
-                        logger_1.Logger.showError(String(error_13));
+                        error_15 = _b.sent();
+                        logger_1.Logger.showError(String(error_15));
                         return [2 /*return*/, {
-                                resultCode: error_13.response.data.impactvision.result_code,
-                                resultMessage: error_13.response.data.impactvision.result_message,
+                                resultCode: error_15.response.data.impactvision.result_code,
+                                resultMessage: error_15.response.data.impactvision.result_message,
                                 data: null,
                             }];
                     case 4: return [2 /*return*/];
-                }
-            });
-        });
-    };
-    /**
-     * 라운드의 스코어 카드를 가져온다.
-     * @param branchID 지점 번호
-     * @param phoneNumber 회원의 휴대폰 번호
-     * @param roundID 라운드 고유번호
-     */
-    ImpactVisionManager.prototype.getScoreCard = function (branchID, phoneNumber, roundID) {
-        var _a;
-        return __awaiter(this, void 0, void 0, function () {
-            var shopID, url, response, scoreCardObjcArray, scoreCard, error_14;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        _b.trys.push([0, 2, , 3]);
-                        shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
-                        url = [
-                            "" + this.BASE_URL + this.GAME_ENPOINT,
-                            "?st_type=game_list",
-                            "&shop_pid=" + this.SHOP_PID,
-                            "&shop_id=" + shopID,
-                            "&shop_key=" + this.SHOP_KEY,
-                            "&ivm_id=" + phoneNumber,
-                            "&gm_index=" + roundID,
-                        ].join("");
-                        return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
-                    case 1:
-                        response = _b.sent();
-                        if (response.data.impactvision.result_code === "FAIL") {
-                            logger_1.Logger.showError(response.data.impactvision.result_message);
-                            return [2 /*return*/, {
-                                    resultCode: response.data.impactvision.result_code,
-                                    resultMessage: response.data.impactvision.result_message,
-                                    data: null,
-                                }];
-                        }
-                        scoreCardObjcArray = response.data.impactvision.scorecard;
-                        scoreCard = new scoreCard_1.ScoreCard(scoreCardObjcArray);
-                        return [2 /*return*/, {
-                                resultCode: response.data.impactvision.result_code,
-                                resultMessage: response.data.impactvision.result_message,
-                                data: scoreCard,
-                            }];
-                    case 2:
-                        error_14 = _b.sent();
-                        logger_1.Logger.showError(String(error_14));
-                        return [2 /*return*/, {
-                                resultCode: error_14.response.data.impactvision.result_code,
-                                resultMessage: error_14.response.data.impactvision.result_message,
-                                data: null,
-                            }];
-                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -910,7 +979,7 @@ var ImpactVisionManager = /** @class */ (function () {
     ImpactVisionManager.prototype.openPlate = function (branchID, lockKey, duration) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var shopID, url, response, error_15;
+            var shopID, url, response, error_16;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -934,11 +1003,11 @@ var ImpactVisionManager = /** @class */ (function () {
                                 data: null,
                             }];
                     case 2:
-                        error_15 = _b.sent();
-                        logger_1.Logger.showError(String(error_15));
+                        error_16 = _b.sent();
+                        logger_1.Logger.showError(String(error_16));
                         return [2 /*return*/, {
-                                resultCode: error_15.response.data.impactvision.result_code,
-                                resultMessage: error_15.response.data.impactvision.result_message,
+                                resultCode: error_16.response.data.impactvision.result_code,
+                                resultMessage: error_16.response.data.impactvision.result_message,
                                 data: null,
                             }];
                     case 3: return [2 /*return*/];
@@ -954,7 +1023,7 @@ var ImpactVisionManager = /** @class */ (function () {
     ImpactVisionManager.prototype.shutPlate = function (branchID, lockKey) {
         var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var shopID, url, response, error_16;
+            var shopID, url, response, error_17;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0:
@@ -977,11 +1046,11 @@ var ImpactVisionManager = /** @class */ (function () {
                                 data: null,
                             }];
                     case 2:
-                        error_16 = _b.sent();
-                        logger_1.Logger.showError(String(error_16));
+                        error_17 = _b.sent();
+                        logger_1.Logger.showError(String(error_17));
                         return [2 /*return*/, {
-                                resultCode: error_16.response.data.impactvision.result_code,
-                                resultMessage: error_16.response.data.impactvision.result_message,
+                                resultCode: error_17.response.data.impactvision.result_code,
+                                resultMessage: error_17.response.data.impactvision.result_message,
                                 data: null,
                             }];
                     case 3: return [2 /*return*/];
