@@ -4,10 +4,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * 스코어 카드 데이터
  */
 var ScoreCard = /** @class */ (function () {
-    function ScoreCard(objcArray) {
-        this.holeData = objcArray.map(function (objc) {
-            return new HoleData(objc);
-        });
+    function ScoreCard(holeData, roundData) {
+        this.holeData = holeData;
+        this.roundData = roundData;
     }
     return ScoreCard;
 }());

@@ -5,10 +5,9 @@ class ScoreCard {
   roundData?: RoundData;
   holeData: HoleData[];
 
-  constructor(objcArray: any[]) {
-    this.holeData = objcArray.map((objc) => {
-      return new HoleData(objc);
-    });
+  constructor(holeData: HoleData[], roundData?: RoundData) {
+    this.holeData = holeData;
+    this.roundData = roundData;
   }
 }
 
