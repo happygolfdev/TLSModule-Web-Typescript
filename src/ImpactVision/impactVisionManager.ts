@@ -451,7 +451,7 @@ class ImpactVisionManager {
         `&client_lock_key=${lockKey}`,
         `&client_lock_mode=pc_off`,
       ].join("");
-
+      console.log(url);
       const response = await Axios.get(encodeURI(url));
       return {
         resultCode: response.data.impactvision.result_code,
@@ -487,6 +487,7 @@ class ImpactVisionManager {
         `&client_lock_mode=${lockMode}`,
       ].join("");
 
+      console.log(url);
       const response = await Axios.get(encodeURI(url));
       return {
         resultCode: response.data.impactvision.result_code,
@@ -510,44 +511,17 @@ class ImpactVisionManager {
    */
   public async controlProjector(branchID: Number, lockKey: String) {
     try {
-      const { resultCode, resultMessage, data } = await this.getAllStatus(
-        branchID
-      );
-      if (resultCode === "FAIL") {
-        Logger.showError(resultMessage);
-        return {
-          resultCode: resultCode,
-          resultMessage: resultMessage,
-          data: null,
-        };
-      }
-
-      const plates = data.plates;
-      let isProjectOn = undefined;
-      await plates?.forEach(async (plate) => {
-        if (plate.lockKey === lockKey) {
-          isProjectOn = plate.isProjectorOn;
-        }
-      });
-
-      if (isProjectOn === null) {
-        return {
-          resultCode: "FAIL",
-          resultMessage: "projector cannot be remote controlled",
-          data: null,
-        };
-      }
-
       const shopID = this.getBranchInfo(branchID)?.id;
       const url = [
-        `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}?st_type=Ctrl`,
+        `${this.BASE_URL}${this.PLATE_CONTROL_ENPOINT}`,
+        `?st_type=Ctrl`,
         `&shop_pid=${this.SHOP_PID}`,
         `&shop_id=${shopID}`,
         `&shop_key=${this.SHOP_KEY}`,
         `&client_lock_key=${lockKey}`,
         `&client_lock_mode=pj_signal`,
       ].join("");
-
+      console.log(url);
       const response = await Axios.get(encodeURI(url));
       return {
         resultCode: response.data.impactvision.result_code,
@@ -608,9 +582,7 @@ class ImpactVisionManager {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        data: {
-          roundData: roundDataList,
-        },
+        data: roundDataList,
       };
     } catch (error) {
       Logger.showError(String(error));
@@ -667,9 +639,7 @@ class ImpactVisionManager {
       return {
         resultCode: response.data.impactvision.result_code,
         resultMessage: response.data.impactvision.result_message,
-        data: {
-          roundData: roundDataList,
-        },
+        data: roundDataList,
       };
     } catch (error) {
       Logger.showError(String(error));
@@ -1115,6 +1085,11 @@ class ImpactVisionManager {
           id: "ivm140200",
           password: process.env.BRANCH_3,
         };
+      case 5: //의왕
+        return {
+          id: "ivm160206",
+          password: process.env.BRANCH_3,
+        };
       default:
         return null;
     }
@@ -1132,7 +1107,7 @@ class ImpactVisionManager {
         return 3;
       case "ivm140200": //평촌
         return 4;
-      case "잠실":
+      case "ivm160206": //의왕
         return 5;
       case "정자":
         return 6;

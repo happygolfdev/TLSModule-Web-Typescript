@@ -572,6 +572,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&client_lock_key=" + lockKey,
                             "&client_lock_mode=pc_off",
                         ].join("");
+                        console.log(url);
                         return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
                     case 1:
                         response = _b.sent();
@@ -617,6 +618,7 @@ var ImpactVisionManager = /** @class */ (function () {
                             "&client_lock_key=" + lockKey,
                             "&client_lock_mode=" + lockMode,
                         ].join("");
+                        console.log(url);
                         return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
                     case 1:
                         response = _b.sent();
@@ -644,70 +646,41 @@ var ImpactVisionManager = /** @class */ (function () {
      * @param lockKey 제어할 타석의 lockKey
      */
     ImpactVisionManager.prototype.controlProjector = function (branchID, lockKey) {
-        var _a, _b;
+        var _a;
         return __awaiter(this, void 0, void 0, function () {
-            var _c, resultCode, resultMessage, data, plates, isProjectOn_1, shopID, url, response, error_11;
-            var _this = this;
-            return __generator(this, function (_d) {
-                switch (_d.label) {
+            var shopID, url, response, error_11;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
                     case 0:
-                        _d.trys.push([0, 4, , 5]);
-                        return [4 /*yield*/, this.getAllStatus(branchID)];
-                    case 1:
-                        _c = _d.sent(), resultCode = _c.resultCode, resultMessage = _c.resultMessage, data = _c.data;
-                        if (resultCode === "FAIL") {
-                            logger_1.Logger.showError(resultMessage);
-                            return [2 /*return*/, {
-                                    resultCode: resultCode,
-                                    resultMessage: resultMessage,
-                                    data: null,
-                                }];
-                        }
-                        plates = data.plates;
-                        isProjectOn_1 = undefined;
-                        return [4 /*yield*/, ((_a = plates) === null || _a === void 0 ? void 0 : _a.forEach(function (plate) { return __awaiter(_this, void 0, void 0, function () {
-                                return __generator(this, function (_a) {
-                                    if (plate.lockKey === lockKey) {
-                                        isProjectOn_1 = plate.isProjectorOn;
-                                    }
-                                    return [2 /*return*/];
-                                });
-                            }); }))];
-                    case 2:
-                        _d.sent();
-                        if (isProjectOn_1 === null) {
-                            return [2 /*return*/, {
-                                    resultCode: "FAIL",
-                                    resultMessage: "projector cannot be remote controlled",
-                                    data: null,
-                                }];
-                        }
-                        shopID = (_b = this.getBranchInfo(branchID)) === null || _b === void 0 ? void 0 : _b.id;
+                        _b.trys.push([0, 2, , 3]);
+                        shopID = (_a = this.getBranchInfo(branchID)) === null || _a === void 0 ? void 0 : _a.id;
                         url = [
-                            "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT + "?st_type=Ctrl",
+                            "" + this.BASE_URL + this.PLATE_CONTROL_ENPOINT,
+                            "?st_type=Ctrl",
                             "&shop_pid=" + this.SHOP_PID,
                             "&shop_id=" + shopID,
                             "&shop_key=" + this.SHOP_KEY,
                             "&client_lock_key=" + lockKey,
                             "&client_lock_mode=pj_signal",
                         ].join("");
+                        console.log(url);
                         return [4 /*yield*/, axios_1.default.get(encodeURI(url))];
-                    case 3:
-                        response = _d.sent();
+                    case 1:
+                        response = _b.sent();
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
                                 data: null,
                             }];
-                    case 4:
-                        error_11 = _d.sent();
+                    case 2:
+                        error_11 = _b.sent();
                         logger_1.Logger.showError(String(error_11));
                         return [2 /*return*/, {
                                 resultCode: error_11.response.data.impactvision.result_code,
                                 resultMessage: error_11.response.data.impactvision.result_message,
                                 data: null,
                             }];
-                    case 5: return [2 /*return*/];
+                    case 3: return [2 /*return*/];
                 }
             });
         });
@@ -763,9 +736,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                data: {
-                                    roundData: roundDataList_1,
-                                },
+                                data: roundDataList_1,
                             }];
                     case 3:
                         error_12 = _a.sent();
@@ -833,9 +804,7 @@ var ImpactVisionManager = /** @class */ (function () {
                         return [2 /*return*/, {
                                 resultCode: response.data.impactvision.result_code,
                                 resultMessage: response.data.impactvision.result_message,
-                                data: {
-                                    roundData: roundDataList_2,
-                                },
+                                data: roundDataList_2,
                             }];
                     case 3:
                         error_13 = _b.sent();
@@ -1369,6 +1338,11 @@ var ImpactVisionManager = /** @class */ (function () {
                     id: "ivm140200",
                     password: process.env.BRANCH_3,
                 };
+            case 5: //의왕
+                return {
+                    id: "ivm160206",
+                    password: process.env.BRANCH_3,
+                };
             default:
                 return null;
         }
@@ -1385,7 +1359,7 @@ var ImpactVisionManager = /** @class */ (function () {
                 return 3;
             case "ivm140200": //평촌
                 return 4;
-            case "잠실":
+            case "ivm160206": //의왕
                 return 5;
             case "정자":
                 return 6;
